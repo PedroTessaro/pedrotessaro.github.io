@@ -3,9 +3,9 @@ import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-  // Atualize "site" quando escolher a hospedagem (necessário para sitemap/SEO).
-  // ex.: "https://seudominio.com" ou "https://usuario.github.io/PortfolioWebsite"
-  site: "https://example.com",
+  // Hospedagem: GitHub Pages como página de usuário (raiz, sem "base").
+  // Quando comprar um domínio próprio, troque por "https://seudominio.com".
+  site: "https://pedrotessaro.github.io",
   i18n: {
     locales: ["pt", "en"],
     defaultLocale: "pt",
