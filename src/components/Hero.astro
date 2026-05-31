@@ -1,0 +1,153 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import { name, role, tagline } from "../data/profile";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<section class="hero">
+  <div class="container hero-inner">
+    <p class="availability reveal">
+      <span class="dot" aria-hidden="true"></span>
+      {t("hero.available")}
+    </p>
+
+    <h1 class="hero-name reveal">{name}</h1>
+    <p class="hero-role reveal">{role[locale]}</p>
+    <p class="hero-tagline reveal">{tagline[locale]}</p>
+
+    <div class="hero-ctas reveal">
+      <a class="btn btn-primary" href="#projects">{t("hero.cta.projects")}</a>
+      <a class="btn btn-secondary" href="#contact">{t("hero.cta.contact")}</a>
+    </div>
+
+    <dl class="hero-spec reveal">
+      <div class="spec spec-ios">
+        <dt>{t("hero.specIos")}</dt>
+        <dd>SwiftUI · UIKit · CloudKit</dd>
+      </div>
+      <div class="spec spec-sys">
+        <dt>{t("hero.specSystems")}</dt>
+        <dd>C · Rust · Assembly</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(4rem, 13vw, 8.5rem) clamp(3rem, 8vw, 5rem);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-inner {
+    max-width: 760px;
+  }
+
+  .availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 980px;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-systems);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-systems) 60%, transparent);
+    animation: pulse 2.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-systems) 55%, transparent);
+    }
+    70% {
+      box-shadow: 0 0 0 7px transparent;
+    }
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+
+  .hero-name {
+    font-size: clamp(2.8rem, 9vw, 5rem);
+    font-weight: 700;
+    margin-block: 1.2rem 0.5rem;
+  }
+  .hero-role {
+    font-family: var(--font-mono);
+    font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+    color: var(--accent);
+    margin-bottom: 1.4rem;
+  }
+  .hero-tagline {
+    max-width: 52ch;
+    font-size: clamp(1.05rem, 2.3vw, 1.25rem);
+    color: var(--text-muted);
+  }
+
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 2.2rem;
+  }
+
+  .hero-spec {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 3rem;
+    border-top: 1px solid var(--border);
+  }
+  .spec {
+    padding: 1.1rem 1.3rem 1.1rem 0;
+  }
+  .spec + .spec {
+    padding-left: 1.3rem;
+    border-left: 1px solid var(--border);
+  }
+  .spec dt {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+  }
+  .spec-ios dt {
+    color: var(--accent);
+  }
+  .spec-sys dt {
+    color: var(--accent-systems);
+  }
+  .spec dd {
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  @media (max-width: 520px) {
+    .hero-spec {
+      grid-template-columns: 1fr;
+    }
+    .spec + .spec {
+      padding-left: 0;
+      border-left: none;
+      border-top: 1px solid var(--border);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dot {
+      animation: none;
+    }
+  }
+</style>

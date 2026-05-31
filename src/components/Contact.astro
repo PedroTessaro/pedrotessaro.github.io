@@ -1,0 +1,71 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import { email, socials, resume } from "../data/profile";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<section id="contact" class="section">
+  <div class="container contact-inner reveal">
+    <p class="eyebrow">// {t("nav.contact")}</p>
+    <h2 class="section-title">{t("contact.title")}</h2>
+    <p class="contact-intro">{t("contact.intro")}</p>
+
+    <div class="contact-actions">
+      <a class="btn btn-primary" href={`mailto:${email}`}>{t("contact.email")}</a>
+      <a class="btn btn-secondary" href={resume[locale]} target="_blank" rel="noopener noreferrer">
+        {t("contact.resume")}
+      </a>
+    </div>
+
+    <ul class="socials">
+      {
+        socials.map((s) => (
+          <li>
+            <a href={s.url} target={s.icon === "email" ? undefined : "_blank"} rel="noopener noreferrer">
+              {s.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .contact-intro {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 40ch;
+    margin-top: 0.5rem;
+  }
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.8rem;
+  }
+  .socials {
+    list-style: none;
+    padding: 0;
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+  }
+  .socials a {
+    color: var(--text-muted);
+    border-bottom: 1px solid transparent;
+  }
+  .socials a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+</style>

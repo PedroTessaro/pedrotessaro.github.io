@@ -1,0 +1,83 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import { projects } from "../data/projects";
+import ProjectCard from "./ProjectCard.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const iosProjects = projects.filter((p) => p.area === "ios");
+const systemsProjects = projects.filter((p) => p.area === "systems");
+---
+
+<section id="projects" class="section projects">
+  <div class="container">
+    <p class="eyebrow">// {t("nav.projects")}</p>
+    <h2 class="section-title">{t("projects.title")}</h2>
+
+    {
+      iosProjects.length > 0 && (
+        <div class="project-group">
+          <h3 class="group-title group-ios">{t("projects.ios")}</h3>
+          <div class="grid">
+            {iosProjects.map((p) => (
+              <ProjectCard project={p} locale={locale} />
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    {
+      systemsProjects.length > 0 && (
+        <div class="project-group">
+          <h3 class="group-title group-sys">{t("projects.systems")}</h3>
+          <div class="grid">
+            {systemsProjects.map((p) => (
+              <ProjectCard project={p} locale={locale} />
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .projects {
+    background: var(--surface);
+  }
+  .project-group {
+    margin-top: 2.5rem;
+  }
+  .group-title {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 1.2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .group-title::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .group-ios::before {
+    background: var(--accent);
+  }
+  .group-sys::before {
+    background: var(--accent-systems);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+</style>

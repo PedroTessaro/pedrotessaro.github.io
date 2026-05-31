@@ -1,0 +1,4 @@
+# Coloque aqui seu currículo em PDF:
+#   - curriculo.pdf  (PT)
+#   - resume.pdf     (EN)
+# Os caminhos são configurados em src/data/profile.ts (export `resume`).

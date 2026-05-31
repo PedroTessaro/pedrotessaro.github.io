@@ -1,0 +1,29 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "./Header.astro";
+import Hero from "./Hero.astro";
+import About from "./About.astro";
+import ProjectsSection from "./ProjectsSection.astro";
+import Contact from "./Contact.astro";
+import Footer from "./Footer.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout locale={locale}>
+  <a class="skip-link" href="#main">{t("nav.skipToContent")}</a>
+  <Header locale={locale} />
+  <main id="main">
+    <Hero locale={locale} />
+    <About locale={locale} />
+    <ProjectsSection locale={locale} />
+    <Contact locale={locale} />
+  </main>
+  <Footer locale={locale} />
+</BaseLayout>

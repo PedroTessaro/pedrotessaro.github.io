@@ -1,0 +1,151 @@
+---
+import type { Locale, Project } from "../data/types";
+
+interface Props {
+  project: Project;
+  locale: Locale;
+}
+const { project, locale } = Astro.props;
+---
+
+<article class={`card card-${project.area} reveal`}>
+  {
+    project.image && (
+      <div class="card-media">
+        <img src={project.image} alt={project.title} loading="lazy" />
+      </div>
+    )
+  }
+  <div class="card-body">
+    <header class="card-head">
+      {project.area === "systems" && <span class="prompt" aria-hidden="true">$</span>}
+      <h3 class="card-title">{project.title}</h3>
+    </header>
+    <p class="card-tagline">{project.tagline[locale]}</p>
+    <p class="card-desc">{project.description[locale]}</p>
+
+    <ul class="card-tech">
+      {project.tech.map((tech) => <li class="tag">{tech}</li>)}
+    </ul>
+
+    {
+      project.links.length > 0 && (
+        <div class="card-links">
+          {project.links.map((link) => (
+            <a class="card-link" href={link.url} target="_blank" rel="noopener noreferrer">
+              {link.label}
+              <span aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+  /* Barra de acento no topo, revelada no hover */
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+  .card-systems::before {
+    background: var(--accent-systems);
+  }
+  .card:hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  }
+  .card-systems:hover {
+    border-color: color-mix(in srgb, var(--accent-systems) 50%, var(--border));
+  }
+  .card:hover::before {
+    transform: scaleX(1);
+  }
+  .card-media {
+    aspect-ratio: 16 / 10;
+    background: var(--surface);
+  }
+  .card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .card-body {
+    padding: 1.3rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .prompt {
+    font-family: var(--font-mono);
+    color: var(--accent-systems);
+    font-weight: 700;
+  }
+  .card-title {
+    font-size: 1.25rem;
+  }
+  .card-systems .card-title {
+    font-family: var(--font-mono);
+    letter-spacing: -0.01em;
+  }
+  .card-tagline {
+    margin-top: 0.4rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .card-desc {
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+  .card-tech {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .card-links {
+    margin-top: auto;
+    padding-top: 1.1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--accent);
+  }
+  .card-systems .card-link {
+    color: var(--accent-systems);
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+</style>

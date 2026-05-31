@@ -1,0 +1,89 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import { bio, skills } from "../data/profile";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const paragraphs = bio[locale].split("\n\n");
+---
+
+<section id="about" class="section">
+  <div class="container">
+    <p class="eyebrow">// {t("nav.about")}</p>
+    <h2 class="section-title">{t("about.title")}</h2>
+
+    <div class="about-grid reveal">
+      <div class="about-bio">
+        {paragraphs.map((p) => <p>{p}</p>)}
+      </div>
+
+      <div class="about-skills">
+        <h3 class="skills-heading">{t("about.skills")}</h3>
+        {
+          skills.map((group) => (
+            <div class={`skill-group ${group.area}`}>
+              <h4>{group.title[locale]}</h4>
+              <ul>
+                {group.items.map((item) => (
+                  <li class="tag">{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(1.5rem, 5vw, 3.5rem);
+    margin-top: 1.5rem;
+  }
+  .about-bio p + p {
+    margin-top: 1rem;
+  }
+  .about-bio {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+  .skills-heading {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  .skill-group + .skill-group {
+    margin-top: 1.4rem;
+  }
+  .skill-group h4 {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.6rem;
+  }
+  .skill-group.ios h4 {
+    color: var(--accent);
+  }
+  .skill-group.systems h4 {
+    color: var(--accent-systems);
+  }
+  .skill-group ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  @media (max-width: 760px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
