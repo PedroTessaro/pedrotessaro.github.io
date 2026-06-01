@@ -1,0 +1,120 @@
+\documentclass[11pt,a4paper]{article}
+
+% ---------- Pacotes ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage[scaled=1.0]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[left=1.5cm,right=1.5cm,top=1.0cm,bottom=0.8cm]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage[hidelinks]{hyperref}
+
+% ---------- Cores ----------
+\definecolor{accent}{HTML}{1A4FA0}
+\definecolor{muted}{HTML}{555555}
+
+% ---------- Sem numeracao de pagina ----------
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+% ---------- Estilo de secao ----------
+\titleformat{\section}
+  {\large\bfseries\color{accent}}
+  {}{0em}{}[{\color{accent}\titlerule[0.8pt]}]
+\titlespacing*{\section}{0pt}{5pt}{3pt}
+
+% ---------- Comandos auxiliares ----------
+% Entrada de experiencia/formacao: {titulo}{local}{periodo}
+\newcommand{\entry}[3]{%
+  \textbf{#1} \hfill {\color{muted}#3}\\[1pt]
+  {\color{muted}\itshape #2}\par\vspace{2pt}}
+
+\newcommand{\entrysimple}[2]{%
+  \textbf{#1} \hfill {\color{muted}#2}\par\vspace{2pt}}
+
+% Lista de bullets compacta
+\newenvironment{points}
+  {\begin{itemize}[leftmargin=1.2em,itemsep=1pt,topsep=2pt,parsep=0pt]}
+  {\end{itemize}}
+
+\begin{document}
+
+% ===================== CABECALHO =====================
+\begin{center}
+  {\Huge\bfseries Pedro Tessaro Augusto}\\[3pt]
+  {\large\color{accent} Desenvolvedor iOS \& Apple}\\[6pt]
+  {\color{muted}\small
+    São Paulo -- SP, Brasil \quad$\cdot$\quad +55 11 99604-4373 \quad$\cdot$\quad
+    \href{mailto:ptssar22@gmail.com}{ptssar22@gmail.com}\\[2pt]
+    \href{https://github.com/PedroTessaro}{github.com/PedroTessaro} \quad$\cdot$\quad
+    \href{https://linkedin.com/in/pedrotessaro}{linkedin.com/in/pedrotessaro}
+  }
+\end{center}
+\vspace{2pt}
+
+% ===================== PERFIL =====================
+\section{Perfil}
+Desenvolvedor de software focado no ecossistema Apple, com aplicativos publicados na App Store
+em iOS e tvOS. Experiência sólida em Swift, SwiftUI e UIKit e nos principais frameworks da
+plataforma. Também atua em sistemas de baixo nível (C, Rust e Assembly), incluindo o
+desenvolvimento de uma linguagem de programação compilada própria.
+
+% ===================== COMPETENCIAS =====================
+\section{Competências Técnicas}
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+  \textbf{iOS \& Apple}      & Swift, SwiftUI, UIKit, CloudKit, Core Data, MultipeerConnectivity, HealthKit, SpriteKit, GameplayKit, Combine, tvOS, Xcode \\[3pt]
+  \textbf{Baixo nível}       & C, Rust, Assembly (x86), Java, gerenciamento de memória, estruturas de dados, concorrência \\[3pt]
+  \textbf{Idiomas}           & Português (nativo), Inglês (fluente), Alemão (básico) \\
+\end{tabularx}
+
+% ===================== EXPERIENCIA =====================
+\section{Experiência}
+\entry{Apple Developer Academy}{Desenvolvedor iOS -- Mackenzie, São Paulo}{2025 -- atual}
+\begin{points}
+  \item Desenvolvimento de aplicativos para o ecossistema Apple em Swift e SwiftUI, do conceito à publicação na App Store.
+  \item Implementação de sincronização e persistência de dados entre dispositivos com CloudKit e Core Data, tratando conflitos, estados offline e consistência.
+  \item Construção de comunicação em tempo real entre dispositivos (iPhone e Apple TV) com MultipeerConnectivity.
+  \item Trabalho em equipes multidisciplinares com metodologias ágeis e Challenge-Based Learning.
+\end{points}
+
+% ===================== FORMACAO =====================
+\section{Formação}
+\entry{Bacharelado em Ciência da Computação}{Universidade Presbiteriana Mackenzie}{2024 -- previsto 2028}
+\vspace{2pt}
+\entry{Técnico em Desenvolvimento de Sistemas}{ETEC Emílio Hernandez Aguilar}{2021 -- 2022}
+
+% ===================== PROJETOS =====================
+\section{Projetos Selecionados}
+\entrysimple{NotADiary \textnormal{\color{muted}-- Swift, SwiftUI, CloudKit, Core Data}}{App Store}
+App de diário com sincronização e persistência robustas via CloudKit, tratando conflitos e consistência entre dispositivos.
+\vspace{2pt}
+
+\entrysimple{Karthos \textnormal{\color{muted}-- Swift, SwiftUI, CloudKit}}{App Store}
+App para pilotos de kart com cronometragem, métricas, gamificação e ranking global em tempo real.
+\vspace{2pt}
+
+\entrysimple{DeckExtinction \textnormal{\color{muted}-- Swift, SwiftUI, GameplayKit}}{App Store}
+Jogo narrativo construído sobre uma árvore de decisões complexa utilizando o GameplayKit da Apple.
+\vspace{2pt}
+
+\entrysimple{Narebatalha \textnormal{\color{muted}-- Swift, UIKit, MultipeerConnectivity, tvOS}}{}
+Jogo multiplayer iOS/tvOS com descoberta de peers e sincronização de estado em tempo real entre dispositivos.
+\vspace{2pt}
+
+\entrysimple{TrigMage \textnormal{\color{muted}-- Swift, SpriteKit, SwiftUI}}{Swift Student Challenge}
+Jogo de aprendizado de trigonometria desenvolvido em pouco mais de uma semana, com sistema de animações e comportamento dinâmico.
+\vspace{2pt}
+
+\entrysimple{Sword \textnormal{\color{muted}-- C, Assembly x86}}{em desenvolvimento}
+Linguagem de programação compilada escrita em C e Assembly x86, explorando design de compiladores e geração de código.
+
+% ===================== MUSICA =====================
+\enlargethispage{2\baselineskip}
+\section{Música}
+Pianista premiado internacionalmente: 3º lugar no Concurso Crescendo 2021 (Virtuoso) e na Medici Music Competition 2021 (Youth Artist).
+
+\end{document}

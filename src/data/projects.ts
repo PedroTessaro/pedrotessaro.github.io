@@ -17,8 +17,8 @@ export const projects: Project[] = [
     },
     tech: ["Swift", "SwiftUI", "CloudKit", "Core Data", "iOS"],
     links: [
-      { label: "App Store", url: "https://apps.apple.com/app/notadiary" },
       { label: "GitHub", url: "https://github.com/PedroTessaro/NotADiary" },
+      { label: "App Store", url: "https://apps.apple.com/br/app/notadiary/id6753695305" },
     ],
     images: [
         "/projects/NAD1.jpg",
@@ -36,7 +36,7 @@ export const projects: Project[] = [
     },
     description: {
       pt: "Jogo de narrativa sobre dinossauros criado utilizando um sistema complexo de árvores de decisão, com o auxílio do GameplayKit.",
-      en: "Narrative game about dinosaurs made with a complex tree system using Apple's GameplayKit",
+      en: "Narrative game about dinosaurs made with a complex tree system using Apple's GameplayKit.",
     },
     tech: ["Swift", "SwiftUI", "GameplayKit", "iOS"],
     links: [
@@ -48,6 +48,29 @@ export const projects: Project[] = [
       "/projects/Deck2.jpg",
       "/projects/Deck3.jpg",
       "/projects/Deck4.jpg",
+    ],
+  },
+  {
+    id: "spaceintetris",
+    area: "ios",
+    title: "Space In Tetris",
+    featured: true,
+    tagline: {
+      pt: "Um recriação do famoso jogo Tetris criado em Swift para o terminal do Mac.",
+      en: "A recreation of the famous Tetris game created in Swift for the Mac terminal.",
+    },
+    description: {
+      pt: "Uma implementação funcional do jogo Tetris feito utilizando Swift e a biblioteca de baixo nível Darwin para ser rodada no terminal do Mac.",
+      en: "A functional implementation of the Tetris game made using Swift and the low-level Darwin library to be run in the Mac terminal.",
+    },
+    tech: ["Swift", "Terminal", "macOS", "Darwin"],
+    links: [
+      { label: "GitHub", url: "https://github.com/SpaceInTetris/SpaceInTetris" },
+    ],
+    images: [
+      "/projects/SIT1.jpg",
+      "/projects/SIT2.jpg",
+      "/projects/SIT3.jpg",
     ],
   },
   {
@@ -98,26 +121,27 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: "spaceintetris",
+    id: "karthos",
     area: "ios",
-    title: "Space In Tetris",
+    title: "Karthos",
     featured: true,
     tagline: {
-      pt: "Um recriação do famoso jogo Tetris criado em Swift para o terminal do Mac.",
-      en: "A recreation of the famous Tetris game created in Swift for the Mac terminal.",
+      pt: "Aplicativo para melhora nas pistas de Kart, cronometrando tempo e possuindo sistema de ranking global.",
+      en: "An app to improve your karting performance, featuring lap times and a global ranking system.",
     },
     description: {
-      pt: "Uma implementação funcional do jogo Tetris feito utilizando Swift e a biblioteca de baixo nível Darwin para ser rodada no terminal do Mac.",
-      en: "A functional implementation of the Tetris game made using Swift and the low-level Darwin library to be run in the Mac terminal.",
+      pt: "Um aplicativo criado utilizando SwiftUI e CloudKit que auxilia pilotos de Kart na melhora de performance nas pistas, com cronômetros, métricas, gamificação e ranking mundial de todos os corredores.",
+      en: "An app created using SwiftUI and CloudKit that helps kart drivers improve their performance on the track, with timers, metrics, gamification, and a global ranking of all racers.",
     },
-    tech: ["Swift", "Terminal", "macOS", "Darwin"],
+    tech: ["Swift", "SwiftUI", "CloudKit", "iOS"],
     links: [
-      { label: "GitHub", url: "https://github.com/SpaceInTetris/SpaceInTetris" },
+      { label: "GitHub", url: "https://github.com/PedroTessaro/Karthos" },
+      { label: "AppStore", url: "https://apps.apple.com/br/app/karthos/id6748964744"} 
     ],
     images: [
-      "/projects/SIT1.jpg",
-      "/projects/SIT2.jpg",
-      "/projects/SIT3.jpg",
+      "/projects/KART1.jpg",
+      "/projects/KART2.jpg",
+      "/projects/KART3.jpg",
     ],
   },
 

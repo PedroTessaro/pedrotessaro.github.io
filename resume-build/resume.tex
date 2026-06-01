@@ -1,0 +1,118 @@
+\documentclass[11pt,a4paper]{article}
+
+% ---------- Packages ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[scaled=1.0]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[left=1.5cm,right=1.5cm,top=1.1cm,bottom=1.0cm]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage[hidelinks]{hyperref}
+
+% ---------- Colors ----------
+\definecolor{accent}{HTML}{1A4FA0}
+\definecolor{muted}{HTML}{555555}
+
+% ---------- No page numbers ----------
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+% ---------- Section style ----------
+\titleformat{\section}
+  {\large\bfseries\color{accent}}
+  {}{0em}{}[{\color{accent}\titlerule[0.8pt]}]
+\titlespacing*{\section}{0pt}{7pt}{4pt}
+
+% ---------- Helper commands ----------
+\newcommand{\entry}[3]{%
+  \textbf{#1} \hfill {\color{muted}#3}\\[1pt]
+  {\color{muted}\itshape #2}\par\vspace{2pt}}
+
+\newcommand{\entrysimple}[2]{%
+  \textbf{#1} \hfill {\color{muted}#2}\par\vspace{2pt}}
+
+\newenvironment{points}
+  {\begin{itemize}[leftmargin=1.2em,itemsep=1pt,topsep=2pt,parsep=0pt]}
+  {\end{itemize}}
+
+\begin{document}
+
+% ===================== HEADER =====================
+\begin{center}
+  {\Huge\bfseries Pedro Tessaro Augusto}\\[3pt]
+  {\large\color{accent} iOS \& Apple Developer}\\[6pt]
+  {\color{muted}\small
+    São Paulo -- SP, Brazil \quad$\cdot$\quad +55 11 99604-4373 \quad$\cdot$\quad
+    \href{mailto:ptssar22@gmail.com}{ptssar22@gmail.com}\\[2pt]
+    \href{https://github.com/PedroTessaro}{github.com/PedroTessaro} \quad$\cdot$\quad
+    \href{https://linkedin.com/in/pedrotessaro}{linkedin.com/in/pedrotessaro}
+  }
+\end{center}
+\vspace{2pt}
+
+% ===================== PROFILE =====================
+\section{Profile}
+Software developer focused on the Apple ecosystem, with apps published on the App Store for
+iOS and tvOS. Strong experience with Swift, SwiftUI and UIKit, and with frameworks such as
+CloudKit, MultipeerConnectivity, SpriteKit and GameplayKit. Also works on low-level systems
+(C, Rust and Assembly), including the development of his own compiled programming language.
+
+% ===================== SKILLS =====================
+\section{Technical Skills}
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+  \textbf{iOS \& Apple} & Swift, SwiftUI, UIKit, CloudKit, Core Data, MultipeerConnectivity, HealthKit, SpriteKit, GameplayKit, Combine, tvOS, Xcode \\[3pt]
+  \textbf{Low-level}    & C, Rust, Assembly (x86), Java, memory management, data structures, concurrency \\[3pt]
+  \textbf{Languages}    & Portuguese (native), English (fluent), German (basic) \\
+\end{tabularx}
+
+% ===================== EXPERIENCE =====================
+\section{Experience}
+\entry{Apple Developer Academy}{iOS Developer -- Mackenzie, São Paulo}{2025 -- present}
+\begin{points}
+  \item Build applications for the Apple ecosystem in Swift and SwiftUI, from concept to App Store release.
+  \item Implement cross-device data sync and persistence with CloudKit and Core Data, handling conflicts, offline states and consistency.
+  \item Develop real-time device-to-device communication (iPhone and Apple TV) with MultipeerConnectivity.
+  \item Work in multidisciplinary teams using agile methodologies and Challenge-Based Learning.
+\end{points}
+
+% ===================== EDUCATION =====================
+\section{Education}
+\entry{B.Sc. in Computer Science}{Universidade Presbiteriana Mackenzie}{2024 -- expected 2028}
+\vspace{2pt}
+\entry{Technical Degree in Systems Development}{ETEC Emílio Hernandez Aguilar}{2021 -- 2022}
+
+% ===================== PROJECTS =====================
+\section{Selected Projects}
+\entrysimple{NotADiary \textnormal{\color{muted}-- Swift, SwiftUI, CloudKit, Core Data}}{App Store}
+Journaling app with a robust sync and persistence system via CloudKit, handling conflicts and cross-device consistency.
+\vspace{3pt}
+
+\entrysimple{Karthos \textnormal{\color{muted}-- Swift, SwiftUI, CloudKit}}{App Store}
+App for kart drivers featuring lap timing, metrics, gamification and a real-time global ranking of racers.
+\vspace{3pt}
+
+\entrysimple{DeckExtinction \textnormal{\color{muted}-- Swift, SwiftUI, GameplayKit}}{App Store}
+Narrative game built on a complex decision-tree system using Apple's GameplayKit.
+\vspace{3pt}
+
+\entrysimple{Narebatalha \textnormal{\color{muted}-- Swift, UIKit, MultipeerConnectivity, tvOS}}{}
+Multiplayer iOS/tvOS game with peer discovery and real-time state synchronization between devices.
+\vspace{3pt}
+
+\entrysimple{TrigMage \textnormal{\color{muted}-- Swift, SpriteKit, SwiftUI}}{Swift Student Challenge}
+Trigonometry-learning game built in just over a week, with an animation system and time-based dynamic behavior.
+\vspace{3pt}
+
+\entrysimple{Sword \textnormal{\color{muted}-- C, Assembly x86}}{in progress}
+Compiled programming language written in C and x86 Assembly, exploring compiler design and code generation.
+
+% ===================== MUSIC =====================
+\section{Music}
+Internationally award-winning pianist: 3rd place at the Crescendo Competition 2021 (Virtuoso category)
+and 3rd place at the Medici Music Competition 2021 (Youth Artist category).
+
+\end{document}
