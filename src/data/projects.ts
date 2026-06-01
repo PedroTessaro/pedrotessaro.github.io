@@ -1,12 +1,5 @@
 import type { Project } from "./types";
 
-// =============================================================================
-//  PROJETOS — edite/adicione seus projetos aqui.
-//  `area`: "ios" (apps) ou "systems" (baixo nível).
-//  Coloque imagens em public/projects/ e referencie em `image`.
-//  Substitua as URLs marcadas com TODO pelos links reais.
-// =============================================================================
-
 export const projects: Project[] = [
   // ---------- iOS / App ----------
   {
@@ -22,18 +15,20 @@ export const projects: Project[] = [
       pt: "Aplicativo iOS publicado na App Store. Projetei um sistema complexo de sincronização e persistência usando CloudKit, lidando com conflitos, estados offline e consistência entre dispositivos.",
       en: "iOS app published on the App Store. I designed a complex sync and persistence system using CloudKit, handling conflicts, offline states, and cross-device consistency.",
     },
-    tech: ["Swift", "SwiftUI", "CloudKit", "Core Data"],
+    tech: ["Swift", "SwiftUI", "CloudKit", "Core Data", "iOS"],
     links: [
-      // TODO: confirme/atualize as URLs.
       { label: "App Store", url: "https://apps.apple.com/app/notadiary" },
-      { label: "GitHub", url: "https://github.com/SEU_USUARIO/NotADiary" },
+      { label: "GitHub", url: "https://github.com/PedroTessaro/NotADiary" },
     ],
-    // image: "/projects/notadiary.png",
+    images: [
+        "/projects/NAD1.jpg",
+        "/projects/NAD2.jpg"
+    ]
   },
   {
     id: "multipeer-game",
     area: "ios",
-    title: "Jogo iOS / tvOS",
+    title: "Narebatalha",
     featured: true,
     tagline: {
       pt: "Jogo multiplayer com comunicação em tempo real entre iPhone e Apple TV.",
@@ -45,10 +40,61 @@ export const projects: Project[] = [
     },
     tech: ["Swift", "UIKit", "MultipeerConnectivity", "tvOS"],
     links: [
-      // TODO: adicione o link do repositório, se houver.
-      { label: "GitHub", url: "https://github.com/SEU_USUARIO/SEU_JOGO" },
+      { label: "GitHub", url: "https://github.com/PedroTessaro/SlingFighters" },
     ],
-    // image: "/projects/game.png",
+    images: [
+        "/projects/NARE1.jpg",
+        "/projects/NARE2.jpg",
+        "/projects/NARE3.jpg",
+        "/projects/NARE4.jpg",
+    ]
+  },
+  {
+    id: "deckextinction",
+    area: "ios",
+    title: "DeckExtinction",
+    featured: true,
+    tagline: {
+      pt: "Jogo de narrativa criado utilizando SwiftUI e GameplayKit",
+      en: "Multiplayer game with real-time communication between iPhone and Apple TV.",
+    },
+    description: {
+      pt: "Jogo de narrativa sobre dinossauros criado utilizando um sistema complexo de árvores de decisão, com o auxílio do GameplayKit.",
+      en: "Narrative game about dinosaurs made with a complex tree system using Apple's GameplayKit",
+    },
+    tech: ["Swift", "SwiftUI", "GameplayKit", "iOS"],
+    links: [
+      { label: "GitHub", url: "https://github.com/PedroTessaro/" },
+    ],
+    images: [
+      "/projects/Deck1.jpg",
+      "/projects/Deck2.jpg",
+      "/projects/Deck3.jpg",
+      "/projects/Deck4.jpg",
+    ],
+  },
+  {
+    id: "trigmage",
+    area: "ios",
+    title: "TrigMage",
+    featured: true,
+    tagline: {
+      pt: "Jogo para aprendizado de matemática trigonométrica feito para o Swift Student Challenge em 1 semana",
+      en: "Game for trigonometry learning made for Swift Student Challenge in 1 week",
+    },
+    description: {
+      pt: "Jogo criado utilizando SpriteKit e SwiftUI para o Swift Student Challenge, pensado e criado em um pouco mais de uma semana. Utiliza sistema de animações e mudanças no comportamento padrão conforme o tempo passa",
+      en: "This game, created using SpriteKit and SwiftUI for the Swift Student Challenge, was conceived and developed in just over a week. It utilizes a system of animations and changes in default behavior as time passes.",
+    },
+    tech: ["Swift", "SpriteKit", "SwiftUI", "iOS", "iPad"],
+    links: [
+      { label: "GitHub", url: "https://github.com/PedroTessaro/TrigMage" },
+    ],
+    images: [
+      "/projects/TRIG1.jpg",
+      "/projects/TRIG2.jpg",
+      "/projects/TRIG3.jpg",
+    ],
   },
 
   // ---------- Low-level / Systems ----------

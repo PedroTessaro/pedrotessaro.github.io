@@ -26,6 +26,8 @@ export interface Project {
   links: ProjectLink[];
   /** Caminho da imagem em /public, ex.: "/projects/notadiary.png". Opcional. */
   image?: string;
+  /** Várias imagens em /public para exibir em carrossel. Opcional. */
+  images?: string[];
   /** Destaque visual (aparece primeiro / maior). */
   featured?: boolean;
 }

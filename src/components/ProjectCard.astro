@@ -6,13 +6,44 @@ interface Props {
   locale: Locale;
 }
 const { project, locale } = Astro.props;
+
+// Reúne as imagens: prioriza `images` (carrossel), com fallback para `image`.
+const slides =
+  project.images && project.images.length > 0
+    ? project.images
+    : project.image
+      ? [project.image]
+      : [];
+const hasCarousel = slides.length > 1;
 ---
 
 <article class={`card card-${project.area} reveal`}>
   {
-    project.image && (
+    slides.length === 1 && (
       <div class="card-media">
-        <img src={project.image} alt={project.title} loading="lazy" />
+        <img src={slides[0]} alt={project.title} loading="lazy" />
+      </div>
+    )
+  }
+  {
+    hasCarousel && (
+      <div class="card-media card-carousel" data-carousel>
+        <div class="carousel-track">
+          {slides.map((src, i) => (
+            <img src={src} alt={`${project.title} — ${i + 1}`} loading="lazy" />
+          ))}
+        </div>
+        <button class="carousel-btn carousel-prev" type="button" aria-label="Imagem anterior">
+          ‹
+        </button>
+        <button class="carousel-btn carousel-next" type="button" aria-label="Próxima imagem">
+          ›
+        </button>
+        <div class="carousel-dots">
+          {slides.map((_, i) => (
+            <button class="carousel-dot" type="button" aria-label={`Ir para imagem ${i + 1}`} />
+          ))}
+        </div>
       </div>
     )
   }
@@ -86,6 +117,89 @@ const { project, locale } = Astro.props;
     height: 100%;
     object-fit: cover;
   }
+
+  /* ---------- Carrossel ---------- */
+  .card-carousel {
+    position: relative;
+  }
+  .carousel-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+  .carousel-track img {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+  }
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--bg-elev) 80%, transparent);
+    color: var(--text);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+  }
+  .card-carousel:hover .carousel-btn,
+  .carousel-btn:focus-visible {
+    opacity: 1;
+  }
+  .carousel-btn:hover {
+    background: var(--bg-elev);
+    border-color: var(--accent);
+  }
+  .carousel-prev {
+    left: 0.5rem;
+  }
+  .carousel-next {
+    right: 0.5rem;
+  }
+  .carousel-dots {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+  .carousel-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--text) 35%, transparent);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  .carousel-dot.is-active {
+    background: var(--accent);
+    transform: scale(1.25);
+  }
+  /* Sempre visíveis em telas de toque, onde não há hover */
+  @media (hover: none) {
+    .carousel-btn {
+      opacity: 1;
+    }
+  }
   .card-body {
     padding: 1.3rem;
     display: flex;
@@ -149,3 +263,44 @@ const { project, locale } = Astro.props;
     text-decoration: underline;
   }
 </style>
+
+<script>
+  // Inicializa cada carrossel da página. Usa scroll-snap nativo + botões/dots.
+  function initCarousels() {
+    document.querySelectorAll<HTMLElement>("[data-carousel]").forEach((root) => {
+      if (root.dataset.ready) return;
+      root.dataset.ready = "true";
+
+      const track = root.querySelector<HTMLElement>(".carousel-track");
+      const prev = root.querySelector<HTMLButtonElement>(".carousel-prev");
+      const next = root.querySelector<HTMLButtonElement>(".carousel-next");
+      const dots = Array.from(root.querySelectorAll<HTMLButtonElement>(".carousel-dot"));
+      if (!track) return;
+
+      const count = track.querySelectorAll("img").length;
+      let index = 0;
+
+      const go = (i: number) => {
+        index = Math.max(0, Math.min(count - 1, i));
+        track.scrollTo({ left: track.clientWidth * index, behavior: "smooth" });
+      };
+
+      const syncDots = () => {
+        const i = Math.round(track.scrollLeft / track.clientWidth);
+        index = i;
+        dots.forEach((d, di) => d.classList.toggle("is-active", di === i));
+      };
+
+      prev?.addEventListener("click", () => go(index - 1));
+      next?.addEventListener("click", () => go(index + 1));
+      dots.forEach((d, i) => d.addEventListener("click", () => go(i)));
+      track.addEventListener("scroll", () => requestAnimationFrame(syncDots), { passive: true });
+
+      syncDots();
+    });
+  }
+
+  initCarousels();
+  // Cobre navegações com View Transitions do Astro, se ativadas.
+  document.addEventListener("astro:page-load", initCarousels);
+</script>
