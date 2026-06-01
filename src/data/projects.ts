@@ -40,7 +40,7 @@ export const projects: Project[] = [
     },
     tech: ["Swift", "SwiftUI", "GameplayKit", "iOS"],
     links: [
-      { label: "GitHub", url: "https://github.com/PedroTessaro/" },
+      { label: "GitHub", url: "https://github.com/PedroTessaro/DeckExtinction" },
       { label: "AppStore", url: "https://apps.apple.com/br/app/deckextinction/id6747092006?l=en-GBDeckExtinction"} 
     ],
     images: [
@@ -88,7 +88,7 @@ export const projects: Project[] = [
     },
     tech: ["Swift", "UIKit", "MultipeerConnectivity", "tvOS"],
     links: [
-      { label: "GitHub", url: "https://github.com/PedroTessaro/SlingFighters" },
+     { label: "GitHub", url: "https://github.com/PedroTessaro/Narebatalha" },
     ],
     images: [
         "/projects/NARE1.jpg",
