@@ -26,6 +26,31 @@ export const projects: Project[] = [
     ]
   },
   {
+    id: "deckextinction",
+    area: "ios",
+    title: "DeckExtinction",
+    featured: true,
+    tagline: {
+      pt: "Jogo de narrativa criado utilizando SwiftUI e GameplayKit",
+      en: "Multiplayer game with real-time communication between iPhone and Apple TV.",
+    },
+    description: {
+      pt: "Jogo de narrativa sobre dinossauros criado utilizando um sistema complexo de árvores de decisão, com o auxílio do GameplayKit.",
+      en: "Narrative game about dinosaurs made with a complex tree system using Apple's GameplayKit",
+    },
+    tech: ["Swift", "SwiftUI", "GameplayKit", "iOS"],
+    links: [
+      { label: "GitHub", url: "https://github.com/PedroTessaro/" },
+      { label: "AppStore", url: "https://apps.apple.com/br/app/deckextinction/id6747092006?l=en-GBDeckExtinction"} 
+    ],
+    images: [
+      "/projects/Deck1.jpg",
+      "/projects/Deck2.jpg",
+      "/projects/Deck3.jpg",
+      "/projects/Deck4.jpg",
+    ],
+  },
+  {
     id: "multipeer-game",
     area: "ios",
     title: "Narebatalha",
@@ -50,30 +75,6 @@ export const projects: Project[] = [
     ]
   },
   {
-    id: "deckextinction",
-    area: "ios",
-    title: "DeckExtinction",
-    featured: true,
-    tagline: {
-      pt: "Jogo de narrativa criado utilizando SwiftUI e GameplayKit",
-      en: "Multiplayer game with real-time communication between iPhone and Apple TV.",
-    },
-    description: {
-      pt: "Jogo de narrativa sobre dinossauros criado utilizando um sistema complexo de árvores de decisão, com o auxílio do GameplayKit.",
-      en: "Narrative game about dinosaurs made with a complex tree system using Apple's GameplayKit",
-    },
-    tech: ["Swift", "SwiftUI", "GameplayKit", "iOS"],
-    links: [
-      { label: "GitHub", url: "https://github.com/PedroTessaro/" },
-    ],
-    images: [
-      "/projects/Deck1.jpg",
-      "/projects/Deck2.jpg",
-      "/projects/Deck3.jpg",
-      "/projects/Deck4.jpg",
-    ],
-  },
-  {
     id: "trigmage",
     area: "ios",
     title: "TrigMage",
@@ -96,6 +97,29 @@ export const projects: Project[] = [
       "/projects/TRIG3.jpg",
     ],
   },
+  {
+    id: "spaceintetris",
+    area: "ios",
+    title: "Space In Tetris",
+    featured: true,
+    tagline: {
+      pt: "Um recriação do famoso jogo Tetris criado em Swift para o terminal do Mac.",
+      en: "A recreation of the famous Tetris game created in Swift for the Mac terminal.",
+    },
+    description: {
+      pt: "Uma implementação funcional do jogo Tetris feito utilizando Swift e a biblioteca de baixo nível Darwin para ser rodada no terminal do Mac.",
+      en: "A functional implementation of the Tetris game made using Swift and the low-level Darwin library to be run in the Mac terminal.",
+    },
+    tech: ["Swift", "Terminal", "macOS", "Darwin"],
+    links: [
+      { label: "GitHub", url: "https://github.com/SpaceInTetris/SpaceInTetris" },
+    ],
+    images: [
+      "/projects/SIT1.jpg",
+      "/projects/SIT2.jpg",
+      "/projects/SIT3.jpg",
+    ],
+  },
 
   // ---------- Low-level / Systems ----------
   {
@@ -112,7 +136,7 @@ export const projects: Project[] = [
     },
     tech: ["C", "Memory management"],
     links: [
-      { label: "GitHub", url: "https://github.com/SEU_USUARIO/memory-lib" },
+      { label: "GitHub", url: "https://github.com/PedroTessaro" },
     ],
   },
   {
@@ -129,7 +153,7 @@ export const projects: Project[] = [
     },
     tech: ["C", "Data structures", "Algorithms"],
     links: [
-      { label: "GitHub", url: "https://github.com/SEU_USUARIO/data-structures" },
+      { label: "GitHub", url: "https://github.com/PedroTessaro" },
     ],
   },
   {
@@ -144,9 +168,9 @@ export const projects: Project[] = [
       pt: "Implementação de Assembly escrita em Java: parsing de instruções, modelo de execução e simulação do comportamento de uma máquina de baixo nível.",
       en: "An Assembly implementation written in Java: instruction parsing, an execution model, and simulation of low-level machine behavior.",
     },
-    tech: ["Java", "Assembly", "Interpreters"],
+    tech: ["Java", "Assembly", "Interpreters", "Assembler"],
     links: [
-      { label: "GitHub", url: "https://github.com/SEU_USUARIO/assembly-java" },
+      { label: "GitHub", url: "https://github.com/PedroTessaro/AssemblerImplementation" },
     ],
   },
 ];
