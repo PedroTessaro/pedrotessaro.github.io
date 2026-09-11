@@ -22,11 +22,9 @@ const dict = {
     "sec.seeAlso": "SEE ALSO",
     "sec.files": "FILES",
     "projects.note":
-      "Linguagem, estrelas e último push vêm da API do GitHub quando esta página é gerada, e são atualizados de novo quando você abre.",
-    "apps.note":
-      "Publicados na App Store. O trabalho interessante neles não foi a interface.",
-    "status.note":
-      "Do serviço que renderiza o terminal no meu perfil do GitHub.",
+      "Linguagem, estrelas e último push vêm da API do GitHub, não deste arquivo.",
+    "apps.note": "Publicados na App Store.",
+    "status.note": "Do serviço que renderiza o terminal no meu perfil.",
     "status.repos": "repositórios",
     "status.stars": "estrelas",
     "status.commits": "commits no ano",
@@ -56,11 +54,9 @@ const dict = {
     "sec.seeAlso": "SEE ALSO",
     "sec.files": "FILES",
     "projects.note":
-      "Language, stars and last push come from the GitHub API when this page is built, and are refreshed again when you open it.",
-    "apps.note":
-      "Published on the App Store. The interesting work in them wasn't the interface.",
-    "status.note":
-      "From the service that renders the terminal on my GitHub profile.",
+      "Language, stars and last push come from the GitHub API, not from this file.",
+    "apps.note": "Published on the App Store.",
+    "status.note": "From the service that renders the terminal on my profile.",
     "status.repos": "repositories",
     "status.stars": "stars",
     "status.commits": "commits this year",

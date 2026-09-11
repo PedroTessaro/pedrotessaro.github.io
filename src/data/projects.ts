@@ -15,16 +15,16 @@ export const projects: Project[] = [
     repo: "TerminalREADME",
     title: "TerminalREADME",
     description: {
-      pt: "Serviço em Go que renderiza o terminal animado no topo do meu perfil do GitHub, montando um SVG a cada requisição. Anima com SMIL porque o GitHub serve a imagem dentro de uma <img>, onde nada executa. Números do GitHub em cache de duas camadas, contador e janela de latência em Redis por HTTP, e uma CI que publica os próprios resultados de volta no serviço.",
-      en: "Go service that renders the animated terminal at the top of my GitHub profile, building an SVG per request. It animates with SMIL because GitHub serves the image inside an <img>, where nothing executes. Two-layer cache for the GitHub numbers, counter and latency window in Redis over HTTP, and a CI that publishes its own results back to the service.",
+      pt: "Serviço em Go que gera o SVG do terminal no topo do meu perfil do GitHub, montado a cada requisição. A animação é SMIL porque o GitHub serve a imagem dentro de uma <img>. Os números do GitHub ficam em cache em duas camadas; o contador de views e a janela de latência ficam em Redis por HTTP. A CI publica testes e cobertura de volta no serviço.",
+      en: "Go service that generates the terminal SVG at the top of my GitHub profile, built per request. The animation is SMIL because GitHub serves the image inside an <img>. GitHub's numbers sit in a two-layer cache; the view counter and the latency window live in Redis over HTTP. CI publishes tests and coverage back to the service.",
     },
     tech: ["Go", "SVG/SMIL", "Redis", "Vercel", "GitHub Actions"],
     links: [
+      { label: "GitHub", url: "https://github.com/PedroTessaro/TerminalREADME" },
       {
-        label: "GitHub",
-        url: "https://github.com/PedroTessaro/TerminalREADME",
+        label: "terminal.svg",
+        url: "https://pedrotessaro.vercel.app/terminal.svg",
       },
-      { label: "terminal.svg", url: "https://pedrotessaro.vercel.app/terminal.svg" },
       { label: "/whoami", url: "https://pedrotessaro.vercel.app/whoami" },
     ],
   },
@@ -34,10 +34,10 @@ export const projects: Project[] = [
     repo: "RSSAggregator",
     title: "RSSAggregator",
     description: {
-      pt: "Agregador de feeds RSS em Go: busca concorrente com pool de workers, persistência em Postgres e uma API REST por cima. Foi onde aprendi a tratar feed lento e feed quebrado como o caso normal, não como exceção.",
-      en: "RSS feed aggregator in Go: concurrent fetching with a worker pool, Postgres persistence and a REST API on top. Where I learned to treat a slow feed and a broken feed as the normal case rather than the exception.",
+      pt: "Agregador de feeds RSS em Go. Pool de workers para buscar os feeds em paralelo, Postgres para persistir e uma API REST por cima.",
+      en: "RSS feed aggregator in Go. Worker pool to fetch feeds in parallel, Postgres for persistence, REST API on top.",
     },
-    tech: ["Go", "PostgreSQL", "REST", "Concorrência"],
+    tech: ["Go", "PostgreSQL", "REST"],
     links: [
       { label: "GitHub", url: "https://github.com/PedroTessaro/RSSAggregator" },
     ],
@@ -50,10 +50,10 @@ export const projects: Project[] = [
     repo: "AssemblerImplementation",
     title: "AssemblerImplementation",
     description: {
-      pt: "Montador de duas passagens em Java. A primeira passagem constrói a tabela de símbolos e resolve rótulos para frente; a segunda gera o código objeto com a realocação aplicada. É o projeto que me fez entender o que um linker faz depois.",
-      en: "Two-pass assembler in Java. The first pass builds the symbol table and resolves forward labels; the second emits object code with relocation applied. The project that made me understand what a linker does afterwards.",
+      pt: "Montador de duas passagens em Java. A primeira passagem monta a tabela de símbolos e resolve rótulos para frente; a segunda emite o código objeto com realocação.",
+      en: "Two-pass assembler in Java. First pass builds the symbol table and resolves forward labels; second pass emits object code with relocation.",
     },
-    tech: ["Java", "Assembly", "Tabela de símbolos", "Realocação"],
+    tech: ["Java", "Assembly"],
     links: [
       {
         label: "GitHub",
@@ -67,10 +67,10 @@ export const projects: Project[] = [
     repo: "ReversePolishNotationInterpreter",
     title: "ReversePolishNotationInterpreter",
     description: {
-      pt: "Interpretador de expressões em notação polonesa reversa, baseado em pilha. Pequeno o bastante para caber na cabeça inteiro, o que o torna um bom lugar para entender como uma linguagem avalia o que lê.",
-      en: "Stack-based interpreter for reverse Polish notation expressions. Small enough to hold in your head all at once, which makes it a good place to understand how a language evaluates what it reads.",
+      pt: "Interpretador de expressões em notação polonesa reversa, baseado em pilha.",
+      en: "Stack-based interpreter for reverse Polish notation expressions.",
     },
-    tech: ["Java", "Pilha", "Parsing"],
+    tech: ["Java"],
     links: [
       {
         label: "GitHub",
@@ -84,10 +84,10 @@ export const projects: Project[] = [
     repo: "parallel_programming_studies",
     title: "parallel_programming_studies",
     description: {
-      pt: "Primitivas de concorrência em C: threads, sincronização e memória compartilhada, escritas à mão para ver as condições de corrida acontecerem em vez de ler sobre elas.",
-      en: "Concurrency primitives in C: threads, synchronisation and shared memory, written by hand to watch race conditions happen rather than read about them.",
+      pt: "Exercícios de concorrência em C: threads, mutexes, variáveis de condição e memória compartilhada.",
+      en: "Concurrency exercises in C: threads, mutexes, condition variables and shared memory.",
     },
-    tech: ["C", "pthreads", "Sincronização"],
+    tech: ["C", "pthreads"],
     links: [
       {
         label: "GitHub",
@@ -101,10 +101,10 @@ export const projects: Project[] = [
     repo: "TextEditor",
     title: "TextEditor",
     description: {
-      pt: "Editor de texto de terminal em C++, a partir do modo raw: sequências de escape, controle de cursor e renderização própria. Sem biblioteca de interface nenhuma.",
-      en: "Terminal text editor in C++, starting from raw mode: escape sequences, cursor control and its own rendering. No interface library at all.",
+      pt: "Editor de texto de terminal em C++. Modo raw, sequências de escape e renderização própria, sem ncurses.",
+      en: "Terminal text editor in C++. Raw mode, escape sequences and its own rendering, no ncurses.",
     },
-    tech: ["C++", "Modo raw", "Escape sequences"],
+    tech: ["C++"],
     links: [
       { label: "GitHub", url: "https://github.com/PedroTessaro/TextEditor" },
     ],
@@ -115,10 +115,10 @@ export const projects: Project[] = [
     repo: "Algorithms-and-Data-Structures",
     title: "Algorithms-and-Data-Structures",
     description: {
-      pt: "Estruturas de dados e algoritmos implementados do zero em C, com atenção ao que cada um custa em memória e não só em tempo.",
-      en: "Data structures and algorithms implemented from scratch in C, with attention to what each one costs in memory and not only in time.",
+      pt: "Estruturas de dados e algoritmos em C, implementados do zero.",
+      en: "Data structures and algorithms in C, implemented from scratch.",
     },
-    tech: ["C", "Estruturas de dados"],
+    tech: ["C"],
     links: [
       {
         label: "GitHub",
@@ -134,10 +134,10 @@ export const projects: Project[] = [
     repo: "NotADiary",
     title: "NotADiary",
     description: {
-      pt: "Diário com imagens, publicado na App Store. O problema real não era a tela: era sincronizar via CloudKit com resolução de conflitos, estado offline e consistência entre dispositivos. Na prática, um sistema distribuído pequeno com um cliente bonito na frente.",
-      en: "Journal with images, published on the App Store. The real problem wasn't the screen: it was syncing through CloudKit with conflict resolution, offline state and cross-device consistency. In practice, a small distributed system with a nice client in front of it.",
+      pt: "Diário com fotos. Sincroniza por CloudKit: resolução de conflitos, fila de operações offline e reconciliação entre dispositivos.",
+      en: "Journal with photos. Syncs through CloudKit: conflict resolution, offline operation queue and reconciliation across devices.",
     },
-    tech: ["Swift", "CloudKit", "Core Data", "Sincronização"],
+    tech: ["Swift", "CloudKit", "Core Data"],
     links: [
       { label: "GitHub", url: "https://github.com/PedroTessaro/NotADiary" },
       {
@@ -153,8 +153,8 @@ export const projects: Project[] = [
     repo: "Karthos",
     title: "Karthos",
     description: {
-      pt: "Publicado na App Store. Ranking compartilhado via CloudKit e comunicação direta entre aparelhos com MultipeerConnectivity — ou seja, consenso sobre placar entre dispositivos que nem sempre se enxergam.",
-      en: "Published on the App Store. Shared ranking through CloudKit and direct device-to-device communication with MultipeerConnectivity — which amounts to agreeing on a scoreboard between devices that can't always see each other.",
+      pt: "Ranking compartilhado no CloudKit e partidas locais por MultipeerConnectivity, sem servidor no meio.",
+      en: "Shared ranking on CloudKit and local matches over MultipeerConnectivity, with no server in between.",
     },
     tech: ["Swift", "CloudKit", "MultipeerConnectivity"],
     links: [
@@ -172,15 +172,12 @@ export const projects: Project[] = [
     repo: "DeckExtinction",
     title: "DeckExtinction",
     description: {
-      pt: "Publicado na App Store. Jogo narrativo construído sobre uma árvore de decisões com estado, onde a dificuldade estava em manter a consistência do que já foi escolhido ao longo da partida.",
-      en: "Published on the App Store. Narrative game built on a stateful decision tree, where the difficulty was keeping what had already been chosen consistent across a whole run.",
+      pt: "Jogo narrativo sobre uma árvore de decisões com estado, construída com GameplayKit.",
+      en: "Narrative game over a stateful decision tree, built with GameplayKit.",
     },
-    tech: ["Swift", "GameplayKit", "Máquina de estados"],
+    tech: ["Swift", "GameplayKit"],
     links: [
-      {
-        label: "GitHub",
-        url: "https://github.com/PedroTessaro/DeckExtinction",
-      },
+      { label: "GitHub", url: "https://github.com/PedroTessaro/DeckExtinction" },
       {
         label: "App Store",
         url: "https://apps.apple.com/br/app/deckextinction/id6747092006",

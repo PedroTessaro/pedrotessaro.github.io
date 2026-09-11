@@ -82,8 +82,8 @@ const endpoints = [
           <p>
             status — {
               locale === "pt"
-                ? "o serviço por trás do terminal, se reportando"
-                : "the service behind the terminal, reporting on itself"
+                ? "números do serviço por trás do terminal"
+                : "numbers from the service behind the terminal"
             }
           </p>
         </div>
@@ -95,8 +95,8 @@ const endpoints = [
           <p class="dim">
             {
               locale === "pt"
-                ? "Estes números foram lidos quando esta página foi gerada e são buscados de novo quando você a abre. Nenhum deles está escrito neste site. As latências são percentis sobre uma janela deslizante das últimas 500 requisições reais; testes e cobertura vêm da última execução da CI na main, que publica os próprios resultados no serviço."
-                : "These were read when this page was built and fetched again when you opened it. None of them are written down in this site. The latencies are percentiles over a rolling window of the last 500 real requests; tests and coverage come from the most recent CI run on main, which publishes its own results to the service."
+                ? "As latências são percentis sobre as últimas 500 requisições. Testes e cobertura vêm da última execução da CI na main. Nada disso está escrito neste site."
+                : "The latencies are percentiles over the last 500 requests. Tests and coverage come from the most recent CI run on main. None of it is written down in this site."
             }
           </p>
         </div>
