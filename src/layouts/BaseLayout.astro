@@ -21,26 +21,17 @@ const pageDesc = description ?? role[locale];
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Tipografia: Space Grotesk (títulos), Inter (texto), JetBrains Mono (código) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
-
     <title>{pageTitle}</title>
     <meta name="description" content={pageDesc} />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Open Graph / social -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDesc} />
     <meta property="og:locale" content={locale} />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="summary" />
 
-    <!-- Define o tema antes da pintura para evitar flash. -->
+    <!-- Theme before first paint, so there's no flash. -->
     <script is:inline>
       (function () {
         try {
@@ -48,8 +39,10 @@ const pageDesc = description ?? role[locale];
           var prefersDark = window.matchMedia(
             "(prefers-color-scheme: dark)"
           ).matches;
-          var theme = stored || (prefersDark ? "dark" : "light");
-          document.documentElement.setAttribute("data-theme", theme);
+          document.documentElement.setAttribute(
+            "data-theme",
+            stored || (prefersDark ? "dark" : "light")
+          );
         } catch (e) {}
       })();
     </script>
@@ -57,33 +50,40 @@ const pageDesc = description ?? role[locale];
   <body>
     <slot />
 
-    <!-- Animação de entrada sutil ao rolar -->
+    <!--
+      The numbers in the HTML were read at build time. This tops them up with
+      whatever the service says now, and leaves the built-in values alone if it
+      can't reach it. Every target is addressed by data-live, so adding a field
+      to the page needs no change here.
+    -->
     <script is:inline>
       (function () {
-        var reduce = window.matchMedia(
-          "(prefers-reduced-motion: reduce)"
-        ).matches;
-        var els = document.querySelectorAll(".reveal");
-        if (reduce || !("IntersectionObserver" in window)) {
-          els.forEach(function (el) {
-            el.classList.add("is-visible");
-          });
-          return;
-        }
-        var io = new IntersectionObserver(
-          function (entries) {
-            entries.forEach(function (entry) {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("is-visible");
-                io.unobserve(entry.target);
+        var targets = document.querySelectorAll("[data-live]");
+        if (!targets.length) return;
+
+        fetch("https://pedrotessaro.vercel.app/whoami", {
+          signal: AbortSignal.timeout(6000),
+        })
+          .then(function (res) {
+            if (!res.ok) throw new Error(String(res.status));
+            return res.json();
+          })
+          .then(function (data) {
+            targets.forEach(function (el) {
+              // "github.stars" walks into the payload.
+              var value = el.dataset.live.split(".").reduce(function (acc, k) {
+                return acc == null ? acc : acc[k];
+              }, data);
+              if (value !== undefined && value !== null && value !== "") {
+                // The build-time render may have added a unit the payload
+                // doesn't carry, so the refresh has to add it back.
+                el.textContent = String(value) + (el.dataset.liveSuffix || "");
               }
             });
-          },
-          { threshold: 0.12 }
-        );
-        els.forEach(function (el) {
-          io.observe(el);
-        });
+          })
+          .catch(function () {
+            /* Build-time values stay on screen. */
+          });
       })();
     </script>
   </body>

@@ -5,10 +5,10 @@ export type Locale = "pt" | "en";
 /** Texto disponível nos dois idiomas. */
 export type Localized = Record<Locale, string>;
 
-export type ProjectArea = "ios" | "systems";
+export type ProjectArea = "backend" | "systems" | "ios";
 
 export interface ProjectLink {
-  /** Rótulo do botão, ex.: "GitHub", "App Store". */
+  /** Rótulo do link, ex.: "GitHub", "App Store". */
   label: string;
   url: string;
 }
@@ -17,19 +17,17 @@ export interface Project {
   id: string;
   area: ProjectArea;
   title: string;
-  /** Subtítulo curto / tagline. */
-  tagline: Localized;
+  /**
+   * Nome do repositório no GitHub, quando houver. É a chave que liga esta
+   * entrada aos dados ao vivo do serviço — linguagem, estrelas, último push.
+   */
+  repo?: string;
   description: Localized;
-  /** Tecnologias exibidas como tags. */
+  /** Tecnologias, exibidas como texto separado por ponto médio. */
   tech: string[];
-  /** Links externos (GitHub, App Store, etc.). */
   links: ProjectLink[];
-  /** Caminho da imagem em /public, ex.: "/projects/notadiary.png". Opcional. */
-  image?: string;
-  /** Várias imagens em /public para exibir em carrossel. Opcional. */
+  /** Capturas em /public, só onde a imagem acrescenta alguma coisa. */
   images?: string[];
-  /** Destaque visual (aparece primeiro / maior). */
-  featured?: boolean;
 }
 
 export interface SkillGroup {
@@ -41,6 +39,4 @@ export interface SkillGroup {
 export interface SocialLink {
   label: string;
   url: string;
-  /** chave de ícone simples usada em Contact/Footer. */
-  icon: "github" | "linkedin" | "email" | "appstore";
 }

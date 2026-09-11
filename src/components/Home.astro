@@ -1,29 +1,234 @@
 ---
-import type { Locale } from "../data/types";
-import { useTranslations } from "../data/i18n";
+import type { Locale, Project } from "../data/types";
+import { useTranslations, otherLocale } from "../data/i18n";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Header from "./Header.astro";
-import Hero from "./Hero.astro";
-import About from "./About.astro";
-import ProjectsSection from "./ProjectsSection.astro";
-import Contact from "./Contact.astro";
-import Footer from "./Footer.astro";
+import { fetchLive, fetchRepos, sinceRoughly } from "../data/live";
+import { projects } from "../data/projects";
+import {
+  shortName,
+  role,
+  stack,
+  availability,
+  bio,
+  socials,
+  resume,
+  email,
+} from "../data/profile";
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+const other = otherLocale(locale);
+
+// Both read at build time. Null or empty if the service is down, in which case
+// the page renders from projects.ts alone and simply has fewer numbers.
+const [live, liveByRepo] = await Promise.all([fetchLive(), fetchRepos()]);
+
+/** Language, stars and last push, when the service knows this repo. */
+function meta(project: Project): string {
+  const hit = project.repo && liveByRepo.get(project.repo.toLowerCase());
+  if (!hit) return project.tech.slice(0, 3).join(" · ");
+
+  const parts = [hit.language];
+  if (hit.stars > 0) parts.push(`★${hit.stars}`);
+  parts.push(sinceRoughly(hit.pushed_at, locale));
+  return parts.filter(Boolean).join("  ");
+}
+
+const byArea = (area: Project["area"]) =>
+  projects.filter((p) => p.area === area);
+
+const today = new Date().toISOString().slice(0, 10);
+const unavailable = t("status.unavailable");
 ---
 
 <BaseLayout locale={locale}>
   <a class="skip-link" href="#main">{t("nav.skipToContent")}</a>
-  <Header locale={locale} />
-  <main id="main">
-    <Hero locale={locale} />
-    <About locale={locale} />
-    <ProjectsSection locale={locale} />
-    <Contact locale={locale} />
-  </main>
-  <Footer locale={locale} />
+
+  <div class="page">
+    <header class="man-head">
+      <span>{shortName}(1)</span>
+      <span class="man-head__mid">Portfolio</span>
+      <span class="man-head__end controls">
+        <a class="control" href={`/${other}/`}>{t("lang.toggle")}</a>
+        <button class="control" type="button" id="theme-toggle">
+          {t("theme.toggle")}
+        </button>
+      </span>
+    </header>
+
+    <main id="main">
+      <section class="section">
+        <h1 class="section__title">{t("sec.name")}</h1>
+        <div class="section__body">
+          <p><span class="strong">{shortName}</span> — {role[locale]}</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">{t("sec.synopsis")}</h2>
+        <div class="section__body">
+          <p>{stack.join(" · ")}</p>
+          <p class="live">{availability[locale]}</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">{t("sec.description")}</h2>
+        <div class="section__body">
+          {bio[locale].split("\n\n").map((para) => <p>{para}</p>)}
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">{t("sec.projects")}</h2>
+        <div class="section__body">
+          <div class="listing">
+            {
+              [...byArea("backend"), ...byArea("systems")].map((project) => (
+                <article class="entry">
+                  <div class="entry__head">
+                    <span class="entry__name">{project.title}</span>
+                    <span class="entry__meta">{meta(project)}</span>
+                  </div>
+                  <p class="entry__desc">{project.description[locale]}</p>
+                  <div class="entry__links">
+                    {project.links.map((link) => (
+                      <a href={link.url}>{link.label}</a>
+                    ))}
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+          <p class="dim note">{t("projects.note")}</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">{t("sec.apps")}</h2>
+        <div class="section__body">
+          <p class="dim">{t("apps.note")}</p>
+          <div class="listing listing--spaced">
+            {
+              byArea("ios").map((project) => (
+                <article class="entry">
+                  <div class="entry__head">
+                    <span class="entry__name">{project.title}</span>
+                    <span class="entry__meta">{meta(project)}</span>
+                  </div>
+                  <p class="entry__desc">{project.description[locale]}</p>
+                  <div class="entry__links">
+                    {project.links.map((link) => (
+                      <a href={link.url}>{link.label}</a>
+                    ))}
+                  </div>
+                  {project.images && (
+                    <div class="shots">
+                      {project.images.map((src) => (
+                        <img src={src} alt={project.title} loading="lazy" />
+                      ))}
+                    </div>
+                  )}
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">{t("sec.status")}</h2>
+        <div class="section__body">
+          <p class="dim">{t("status.note")}</p>
+          <dl class="kv kv--spaced">
+            <dt>{t("status.repos")}</dt>
+            <dd data-live="github.repos">
+              {live?.github.repos ?? unavailable}
+            </dd>
+
+            <dt>{t("status.stars")}</dt>
+            <dd data-live="github.stars">
+              {live?.github.stars ?? unavailable}
+            </dd>
+
+            <dt>{t("status.commits")}</dt>
+            <dd data-live="github.commits_this_year">
+              {live?.github.commits_this_year ?? unavailable}
+            </dd>
+
+            <dt>{t("status.ci")}</dt>
+            <dd data-live="ci.status">
+              {live?.ci?.status ?? unavailable}
+            </dd>
+
+            <dt>{t("status.tests")}</dt>
+            <dd data-live="ci.tests">
+              {live?.ci?.tests ?? unavailable}
+            </dd>
+
+            <dt>{t("status.region")}</dt>
+            <dd data-live="server.region">
+              {live?.server.region ?? unavailable}
+            </dd>
+
+            <dt>{t("status.lastCommit")}</dt>
+            <dd data-live="last_commit.message">
+              {live?.last_commit?.message ?? unavailable}
+            </dd>
+          </dl>
+          <p class="note">
+            <a href={`/${locale}/status/`}>{t("status.link")}</a>
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">{t("sec.files")}</h2>
+        <div class="section__body">
+          <p><a href={resume[locale]}>{t("files.resume")}</a></p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">{t("sec.seeAlso")}</h2>
+        <div class="section__body">
+          <p>
+            {
+              socials.map((s, i) => (
+                <>
+                  {i > 0 && <span class="dim">, </span>}
+                  <a href={s.url}>{s.label}</a>
+                </>
+              ))
+            }
+          </p>
+          <p class="dim">{email}</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="man-foot">
+      <span>{today}</span>
+      <span>Portfolio</span>
+      <span class="man-foot__end">{shortName}(1)</span>
+    </footer>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var button = document.getElementById("theme-toggle");
+      if (!button) return;
+      button.addEventListener("click", function () {
+        var root = document.documentElement;
+        var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try {
+          localStorage.setItem("theme", next);
+        } catch (e) {}
+      });
+    })();
+  </script>
 </BaseLayout>

@@ -1,0 +1,166 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations, otherLocale } from "../data/i18n";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { fetchLive } from "../data/live";
+import { shortName } from "../data/profile";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const other = otherLocale(locale);
+
+const live = await fetchLive();
+const today = new Date().toISOString().slice(0, 10);
+const unavailable = t("status.unavailable");
+
+/** Every row on this page is the same shape, so it's data rather than markup. */
+const rows: {
+  key: string;
+  label: string;
+  value: string | number;
+  /** Unit the payload doesn't carry; the client refresh re-appends it. */
+  suffix?: string;
+}[] = [
+  { key: "server.region", label: t("status.region"), value: live?.server.region ?? unavailable },
+  { key: "server.version", label: t("status.version"), value: live?.server.version ?? unavailable },
+  { key: "server.served_in", label: "served in", value: live?.server.served_in ?? unavailable },
+  { key: "latency.p50", label: t("status.p50"), value: live?.latency?.p50 ?? unavailable },
+  { key: "latency.p95", label: t("status.p95"), value: live?.latency?.p95 ?? unavailable },
+  { key: "latency.samples", label: "samples", value: live?.latency?.samples ?? unavailable },
+  { key: "ci.status", label: t("status.ci"), value: live?.ci?.status ?? unavailable },
+  { key: "ci.tests", label: t("status.tests"), value: live?.ci?.tests ?? unavailable },
+  {
+    key: "ci.coverage",
+    label: t("status.coverage"),
+    value: live?.ci ? `${live.ci.coverage}%` : unavailable,
+    suffix: "%",
+  },
+  { key: "ci.sha", label: "ci commit", value: live?.ci?.sha ?? unavailable },
+  { key: "github.repos", label: t("status.repos"), value: live?.github.repos ?? unavailable },
+  { key: "github.stars", label: t("status.stars"), value: live?.github.stars ?? unavailable },
+  { key: "github.commits_this_year", label: t("status.commits"), value: live?.github.commits_this_year ?? unavailable },
+  { key: "github.cache_age", label: "cache age", value: live?.github.cache_age ?? unavailable },
+  { key: "readme_views.total", label: t("status.views"), value: live?.readme_views?.total ?? unavailable },
+  { key: "readme_views.today", label: "views today", value: live?.readme_views?.today ?? unavailable },
+];
+
+const endpoints = [
+  ["/terminal.svg", "SVG do terminal", "the terminal SVG"],
+  ["/whoami", "perfil em JSON", "profile as JSON"],
+  ["/repos", "todos os repositórios", "every repository"],
+  ["/metrics", "formato Prometheus", "Prometheus format"],
+  ["/healthz", "health check", "health check"],
+] as const;
+---
+
+<BaseLayout
+  locale={locale}
+  title={`status — ${shortName}`}
+  description="Live status of the service that renders the terminal on my GitHub profile."
+>
+  <a class="skip-link" href="#main">{t("nav.skipToContent")}</a>
+
+  <div class="page">
+    <header class="man-head">
+      <span>Status(8)</span>
+      <span class="man-head__mid">Portfolio</span>
+      <span class="man-head__end controls">
+        <a class="control" href={`/${other}/status/`}>{t("lang.toggle")}</a>
+        <button class="control" type="button" id="theme-toggle">
+          {t("theme.toggle")}
+        </button>
+      </span>
+    </header>
+
+    <main id="main">
+      <section class="section">
+        <h1 class="section__title">{t("sec.name")}</h1>
+        <div class="section__body">
+          <p>
+            status — {
+              locale === "pt"
+                ? "o serviço por trás do terminal, se reportando"
+                : "the service behind the terminal, reporting on itself"
+            }
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">{t("sec.description")}</h2>
+        <div class="section__body">
+          <p class="dim">
+            {
+              locale === "pt"
+                ? "Estes números foram lidos quando esta página foi gerada e são buscados de novo quando você a abre. Nenhum deles está escrito neste site. As latências são percentis sobre uma janela deslizante das últimas 500 requisições reais; testes e cobertura vêm da última execução da CI na main, que publica os próprios resultados no serviço."
+                : "These were read when this page was built and fetched again when you opened it. None of them are written down in this site. The latencies are percentiles over a rolling window of the last 500 real requests; tests and coverage come from the most recent CI run on main, which publishes its own results to the service."
+            }
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">{t("sec.status")}</h2>
+        <div class="section__body">
+          <dl class="kv">
+            {
+              rows.map((row) => (
+                <>
+                  <dt>{row.label}</dt>
+                  <dd data-live={row.key} data-live-suffix={row.suffix}>
+                    {row.value}
+                  </dd>
+                </>
+              ))
+            }
+          </dl>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">{t("sec.seeAlso")}</h2>
+        <div class="section__body">
+          <dl class="kv">
+            {
+              endpoints.map(([path, pt, en]) => (
+                <>
+                  <dt>
+                    <a href={`https://pedrotessaro.vercel.app${path}`}>{path}</a>
+                  </dt>
+                  <dd class="dim">{locale === "pt" ? pt : en}</dd>
+                </>
+              ))
+            }
+          </dl>
+          <p class="note">
+            <a href={`/${locale}/`}>{shortName}(1)</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="man-foot">
+      <span>{today}</span>
+      <span>Portfolio</span>
+      <span class="man-foot__end">Status(8)</span>
+    </footer>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var button = document.getElementById("theme-toggle");
+      if (!button) return;
+      button.addEventListener("click", function () {
+        var root = document.documentElement;
+        var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try {
+          localStorage.setItem("theme", next);
+        } catch (e) {}
+      });
+    })();
+  </script>
+</BaseLayout>

@@ -1,7 +1,10 @@
 import type { Locale } from "./types";
 
 // =============================================================================
-//  STRINGS DE INTERFACE — rótulos fixos do site nos dois idiomas.
+//  Interface strings.
+//
+//  Section titles stay in English on both locales: NAME, SYNOPSIS and SEE ALSO
+//  are the names of man page sections, not sentences to translate.
 // =============================================================================
 
 export const locales: Locale[] = ["pt", "en"];
@@ -9,52 +12,72 @@ export const defaultLocale: Locale = "pt";
 
 const dict = {
   pt: {
-    "nav.about": "Sobre",
-    "nav.projects": "Projetos",
-    "nav.contact": "Contato",
     "nav.skipToContent": "Pular para o conteúdo",
-    "hero.available": "Disponível para novas oportunidades",
-    "hero.specIos": "iOS / Apps",
-    "hero.specSystems": "Sistemas",
-    "hero.cta.projects": "Ver projetos",
-    "hero.cta.contact": "Entrar em contato",
-    "about.title": "Sobre mim",
-    "about.skills": "Habilidades",
-    "projects.title": "Projetos",
-    "projects.ios": "iOS / Apps",
-    "projects.systems": "Baixo nível / Sistemas",
-    "projects.viewProject": "Ver projeto",
-    "contact.title": "Contato",
-    "contact.intro": "Aberto a oportunidades. Vamos conversar.",
-    "contact.email": "Enviar email",
-    "contact.resume": "Baixar currículo",
-    "footer.builtWith": "Feito com Astro.",
-    "theme.toggle": "Alternar tema",
-    "lang.toggle": "Mudar idioma",
+    "sec.name": "NAME",
+    "sec.synopsis": "SYNOPSIS",
+    "sec.description": "DESCRIPTION",
+    "sec.projects": "PROJECTS",
+    "sec.apps": "SHIPPED",
+    "sec.status": "STATUS",
+    "sec.seeAlso": "SEE ALSO",
+    "sec.files": "FILES",
+    "projects.note":
+      "Linguagem, estrelas e último push vêm da API do GitHub quando esta página é gerada, e são atualizados de novo quando você abre.",
+    "apps.note":
+      "Publicados na App Store. O trabalho interessante neles não foi a interface.",
+    "status.note":
+      "Do serviço que renderiza o terminal no meu perfil do GitHub.",
+    "status.repos": "repositórios",
+    "status.stars": "estrelas",
+    "status.commits": "commits no ano",
+    "status.ci": "ci",
+    "status.tests": "testes",
+    "status.coverage": "cobertura",
+    "status.p50": "latência p50",
+    "status.p95": "latência p95",
+    "status.region": "região",
+    "status.version": "versão",
+    "status.views": "views do readme",
+    "status.lastCommit": "último commit",
+    "status.unavailable": "indisponível",
+    "status.link": "status completo",
+    "files.resume": "currículo (pdf)",
+    "theme.toggle": "tema",
+    "lang.toggle": "english",
   },
   en: {
-    "nav.about": "About",
-    "nav.projects": "Projects",
-    "nav.contact": "Contact",
     "nav.skipToContent": "Skip to content",
-    "hero.available": "Available for new opportunities",
-    "hero.specIos": "iOS / Apps",
-    "hero.specSystems": "Systems",
-    "hero.cta.projects": "View projects",
-    "hero.cta.contact": "Get in touch",
-    "about.title": "About me",
-    "about.skills": "Skills",
-    "projects.title": "Projects",
-    "projects.ios": "iOS / Apps",
-    "projects.systems": "Low-level / Systems",
-    "projects.viewProject": "View project",
-    "contact.title": "Contact",
-    "contact.intro": "Open to opportunities. Let's talk.",
-    "contact.email": "Send email",
-    "contact.resume": "Download résumé",
-    "footer.builtWith": "Built with Astro.",
-    "theme.toggle": "Toggle theme",
-    "lang.toggle": "Switch language",
+    "sec.name": "NAME",
+    "sec.synopsis": "SYNOPSIS",
+    "sec.description": "DESCRIPTION",
+    "sec.projects": "PROJECTS",
+    "sec.apps": "SHIPPED",
+    "sec.status": "STATUS",
+    "sec.seeAlso": "SEE ALSO",
+    "sec.files": "FILES",
+    "projects.note":
+      "Language, stars and last push come from the GitHub API when this page is built, and are refreshed again when you open it.",
+    "apps.note":
+      "Published on the App Store. The interesting work in them wasn't the interface.",
+    "status.note":
+      "From the service that renders the terminal on my GitHub profile.",
+    "status.repos": "repositories",
+    "status.stars": "stars",
+    "status.commits": "commits this year",
+    "status.ci": "ci",
+    "status.tests": "tests",
+    "status.coverage": "coverage",
+    "status.p50": "p50 latency",
+    "status.p95": "p95 latency",
+    "status.region": "region",
+    "status.version": "version",
+    "status.views": "readme views",
+    "status.lastCommit": "last commit",
+    "status.unavailable": "unavailable",
+    "status.link": "full status",
+    "files.resume": "resume (pdf)",
+    "theme.toggle": "theme",
+    "lang.toggle": "português",
   },
 } as const;
 
