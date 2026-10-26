@@ -1,0 +1,26 @@
+---
+import type { Clip } from "../data/types";
+
+interface Props {
+  clip: Clip;
+  label: string;
+  class?: string;
+}
+const { clip, label, class: className } = Astro.props;
+---
+
+<!--
+  Sem autoplay no HTML: o script do layout só toca enquanto o vídeo está na
+  tela, e nunca com movimento reduzido. Até lá, o pôster faz as vezes do vídeo.
+-->
+<video
+  class:list={["clip", className]}
+  src={clip.src}
+  poster={clip.poster}
+  aria-label={label}
+  muted
+  loop
+  playsinline
+  preload="none"
+  data-clip
+></video>

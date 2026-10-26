@@ -16,6 +16,13 @@ export interface ProjectLink {
 /** Onde o app está. Decide em que grupo da página ele aparece. */
 export type AppStatus = "appstore" | "upcoming" | "built";
 
+/** Um vídeo curto, sem som, que toca em loop enquanto está na tela. */
+export interface Clip {
+  src: string;
+  poster: string;
+  title?: string;
+}
+
 /** Um trecho real do código do app, mostrado fechado na ficha. */
 export interface Snippet {
   /** Caminho dentro do projeto, só para dar contexto. */
@@ -52,8 +59,14 @@ export interface Project {
   tech: string[];
   /** Links externos (GitHub, App Store, etc.). O primeiro vira o botão da ficha. */
   links: ProjectLink[];
+  /** Vídeos que entram antes das capturas, na mesma faixa. */
+  clips?: Clip[];
   /** Capturas em /public, na ordem em que aparecem. */
   images?: string[];
+  /** Vídeo do cartão de destaque, dentro de uma moldura de iPad. */
+  hero?: Clip;
+  /** Coisas feitas com o app, numa faixa própria abaixo do destaque. */
+  gallery?: Clip[];
   /** Selo curto, ex.: "Na fila do App Nominations". */
   badge?: Localized;
   snippet?: Snippet;

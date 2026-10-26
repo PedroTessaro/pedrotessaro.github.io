@@ -109,6 +109,23 @@ export const projects: Project[] = [
     },
     tech: ["Swift", "Metal", "UIKit", "Apple Pencil"],
     links: [],
+    hero: { src: "/media/mola/walk.mp4", poster: "/media/mola/walk.jpg" },
+    clips: [{ src: "/media/mola/popout.mp4", poster: "/media/mola/popout.jpg" }],
+    images: [
+      "/projects/MOLA1.jpg",
+      "/projects/MOLA2.jpg",
+      "/projects/MOLA3.jpg",
+      "/projects/MOLA4.jpg",
+      "/projects/MOLA5.jpg",
+      "/projects/MOLA6.jpg",
+    ],
+    gallery: [
+      { src: "/media/mola/duck.mp4", poster: "/media/mola/duck.jpg", title: "Filho da pata" },
+      { src: "/media/mola/talking.mp4", poster: "/media/mola/talking.jpg", title: "Talking about you" },
+      { src: "/media/mola/zebra.mp4", poster: "/media/mola/zebra.jpg", title: "Pungaré" },
+      { src: "/media/mola/alberto.mp4", poster: "/media/mola/alberto.jpg", title: "Conselhos do Alberto" },
+      { src: "/media/mola/shrinker.mp4", poster: "/media/mola/shrinker.jpg", title: "Shrinker" },
+    ],
     snippet: snippets.mola,
   },
   {

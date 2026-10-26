@@ -4,6 +4,7 @@ import { useTranslations, type UIKey } from "../data/i18n";
 import { projects } from "../data/projects";
 import AppCard from "./AppCard.astro";
 import AppIcon from "./AppIcon.astro";
+import Clip from "./Clip.astro";
 
 interface Props {
   locale: Locale;
@@ -31,9 +32,15 @@ const groups: { status: AppStatus; title: UIKey; note?: UIKey }[] = [
             <h2 class="today-title">{featured.title}</h2>
             <p class="today-subtitle">{featured.tagline[locale]}</p>
           </div>
-          <div class="today-art" aria-hidden="true">
-            <AppIcon project={featured} size={168} />
-          </div>
+          {featured.hero ? (
+            <div class="today-ipad" aria-hidden="true">
+              <Clip clip={featured.hero} label={featured.title} />
+            </div>
+          ) : (
+            <div class="today-art" aria-hidden="true">
+              <AppIcon project={featured} size={168} />
+            </div>
+          )}
           <div class="today-foot">
             <AppIcon project={featured} size={44} />
             <div>
@@ -43,6 +50,25 @@ const groups: { status: AppStatus; title: UIKey; note?: UIKey }[] = [
             <span class="pill today-pill">{t("apps.more")}</span>
           </div>
         </a>
+      )
+    }
+
+    {
+      featured?.gallery && (
+        <div class="gallery-block reveal">
+          <header class="section-header">
+            <h2 class="section-title">{t("apps.gallery")}</h2>
+          </header>
+          <p class="section-intro">{t("apps.galleryNote")}</p>
+          <ul class="gallery">
+            {featured.gallery.map((clip) => (
+              <li>
+                <Clip clip={clip} label={clip.title ?? featured.title} />
+                <p class="gallery-title">{clip.title}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
       )
     }
 
@@ -120,6 +146,73 @@ const groups: { status: AppStatus; title: UIKey; note?: UIKey }[] = [
     width: clamp(110px, 20vw, 168px) !important;
     height: clamp(110px, 20vw, 168px) !important;
   }
+  /* Um iPad desenhado em CSS em volta da tela gravada: moldura preta, cantos do aparelho. */
+  .today-ipad {
+    align-self: center;
+    width: clamp(220px, 38vw, 420px);
+    padding: clamp(8px, 1.2vw, 12px);
+    border-radius: clamp(18px, 2.6vw, 28px);
+    background: #1c1c1e;
+    box-shadow:
+      inset 0 0 0 1.5px #3a3a3c,
+      0 24px 48px rgba(11, 37, 64, 0.28);
+    transform: rotate(-3deg);
+  }
+  .today-ipad :global(video) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 716 / 537;
+    object-fit: cover;
+    border-radius: clamp(10px, 1.5vw, 16px);
+    background: #fff;
+  }
+  @media (max-width: 640px) {
+    .today {
+      grid-template-columns: 1fr;
+    }
+    .today-ipad {
+      justify-self: center;
+      width: min(100%, 340px);
+    }
+  }
+
+  /* Faixa de animações feitas no app, com a mesma rolagem das capturas. */
+  .gallery-block {
+    margin-bottom: clamp(40px, 6vw, 64px);
+  }
+  .gallery {
+    display: flex;
+    gap: 12px;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 0 var(--gutter) 4px;
+    overflow-x: auto;
+    list-style: none;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .gallery::-webkit-scrollbar {
+    display: none;
+  }
+  .gallery li {
+    flex: 0 0 clamp(220px, 30vw, 300px);
+    scroll-snap-align: start;
+  }
+  .gallery :global(video) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 720 / 510;
+    object-fit: cover;
+    border-radius: var(--radius-shot);
+    border: 0.5px solid var(--separator);
+    background: #fff;
+  }
+  .gallery-title {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--secondary-label);
+  }
+
   /* A barra de baixo do cartão: o app, de novo, pequeno, com material. */
   .today-foot {
     grid-column: 1 / -1;

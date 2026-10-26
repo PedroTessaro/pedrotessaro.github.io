@@ -3,6 +3,7 @@ import type { Locale, Project } from "../data/types";
 import { useTranslations } from "../data/i18n";
 import AppIcon from "./AppIcon.astro";
 import Icon from "./Icon.astro";
+import Clip from "./Clip.astro";
 import { Code } from "astro:components";
 import { xcodeDark } from "../data/xcodeTheme";
 
@@ -46,9 +47,14 @@ const meta = [project.category?.[locale], project.team?.[locale]].filter(Boolean
   </header>
 
   {
-    project.images && project.images.length > 0 && (
+    (project.images?.length || project.clips?.length) && (
       <ul class="shots" aria-label={`${project.title}: screenshots`}>
-        {project.images.map((src, i) => (
+        {project.clips?.map((clip, i) => (
+          <li>
+            <Clip clip={clip} label={`${project.title} — video ${i + 1}`} />
+          </li>
+        ))}
+        {project.images?.map((src, i) => (
           <li>
             <img src={src} alt={`${project.title} — ${i + 1}`} loading="lazy" decoding="async" />
           </li>
@@ -173,9 +179,16 @@ const meta = [project.category?.[locale], project.team?.[locale]].filter(Boolean
     flex: none;
     scroll-snap-align: start;
   }
-  .shots img {
+  .shots img,
+  .shots :global(video) {
+    display: block;
     height: 300px;
     width: auto;
+    object-fit: cover;
+  }
+  /* Antes do pôster carregar, o vídeo não tem tamanho próprio. */
+  .shots :global(video) {
+    aspect-ratio: 720 / 506;
     border-radius: var(--radius-shot);
     box-shadow: inset 0 0 0 0.5px var(--separator);
     border: 0.5px solid var(--separator);
@@ -303,7 +316,8 @@ const meta = [project.category?.[locale], project.team?.[locale]].filter(Boolean
       padding-inline: 16px;
       scroll-padding-inline: 16px;
     }
-    .shots img {
+    .shots img,
+    .shots :global(video) {
       height: 240px;
     }
   }
