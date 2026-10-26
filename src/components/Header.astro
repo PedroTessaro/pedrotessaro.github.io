@@ -1,0 +1,83 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import { shortName } from "../data/profile";
+import ThemeToggle from "./ThemeToggle.astro";
+import LanguageToggle from "./LanguageToggle.astro";
+
+interface Props {
+  locale: Locale;
+  /** Caminho dentro do idioma, ex.: "status/". Vazio na home. */
+  path?: string;
+}
+const { locale, path = "" } = Astro.props;
+const t = useTranslations(locale);
+const base = `/${locale}/`;
+
+const links = [
+  { href: "#apps", label: t("nav.apps") },
+  { href: "#swift", label: t("nav.swift") },
+  { href: "#sword", label: t("nav.sword") },
+  { href: "#about", label: t("nav.about") },
+  { href: "#contact", label: t("nav.contact") },
+];
+---
+
+<header class="navbar">
+  <div class="container navbar-inner">
+    <a class="navbar-title" href={base}>{shortName}</a>
+
+    <nav class="navbar-links" aria-label="primary">
+      {links.map((l) => <a href={`${base}${l.href}`}>{l.label}</a>)}
+    </nav>
+
+    <div class="navbar-actions">
+      <LanguageToggle locale={locale} path={path} />
+      <ThemeToggle locale={locale} />
+    </div>
+  </div>
+</header>
+
+<style>
+  /* A barra do iOS: material translúcido, separador de meio ponto. */
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bar-material);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 0.5px solid var(--separator);
+  }
+  .navbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: 52px;
+  }
+  .navbar-title {
+    font-size: 17px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .navbar-links {
+    display: flex;
+    gap: 24px;
+    font-size: 14px;
+    color: var(--secondary-label);
+  }
+  .navbar-links a:hover {
+    color: var(--label);
+  }
+  .navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  @media (max-width: 760px) {
+    .navbar-links {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,97 @@
+---
+import type { IconName, Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import Icon from "./Icon.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const tabs: { href: string; icon: IconName; label: string }[] = [
+  { href: "#apps", icon: "app", label: t("nav.apps") },
+  { href: "#swift", icon: "swift", label: t("nav.swift") },
+  { href: "#sword", icon: "terminal", label: t("nav.sword") },
+  { href: "#about", icon: "person", label: t("nav.about") },
+  { href: "#contact", icon: "envelope", label: t("nav.contact") },
+];
+---
+
+<!-- Só no celular: a navegação vira uma tab bar flutuante, como no iOS 26. -->
+<nav class="tabbar" aria-label="tabs">
+  {
+    tabs.map((tab) => (
+      <a href={tab.href} data-tab={tab.href.slice(1)}>
+        <Icon name={tab.icon} />
+        <span>{tab.label}</span>
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .tabbar {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .tabbar {
+      position: fixed;
+      right: 16px;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      left: 16px;
+      z-index: 60;
+      display: flex;
+      justify-content: space-around;
+      padding: 6px;
+      border-radius: 999px;
+      background: var(--bar-material);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      backdrop-filter: saturate(180%) blur(20px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15), inset 0 0 0 0.5px var(--separator);
+    }
+    .tabbar a {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 6px 0 4px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--secondary-label);
+    }
+    .tabbar a.active {
+      background: var(--tertiary-fill);
+      color: var(--tint);
+    }
+    .tabbar :global(svg) {
+      width: 22px;
+      height: 22px;
+    }
+  }
+</style>
+
+<script is:inline>
+  // Marca a aba da seção que está na tela.
+  (function () {
+    var tabs = document.querySelectorAll(".tabbar a");
+    if (!tabs.length || !("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          tabs.forEach(function (tab) {
+            tab.classList.toggle("active", tab.dataset.tab === entry.target.id);
+          });
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    tabs.forEach(function (tab) {
+      var section = document.getElementById(tab.dataset.tab);
+      if (section) io.observe(section);
+    });
+  })();
+</script>

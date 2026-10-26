@@ -1,0 +1,95 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import { projects } from "../data/projects";
+import Icon from "./Icon.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const groups = [
+  { key: "projects.backend", icon: "pulse", tint: "var(--teal)", items: projects.filter((p) => p.area === "backend") },
+  { key: "projects.systems", icon: "terminal", tint: "#3a3a3c", items: projects.filter((p) => p.area === "systems") },
+] as const;
+---
+
+<section id="other" class="section">
+  <div class="container">
+    <header class="section-header">
+      <h2 class="section-title">{t("projects.other")}</h2>
+    </header>
+    <p class="section-intro">{t("projects.otherIntro")}</p>
+
+    <div class="other-grid">
+      {
+        groups.map((group) => (
+          <div class="reveal">
+            <h3 class="group-header">{t(group.key)}</h3>
+            <ul class="group" style="--separator-inset: 57px">
+              {group.items.map((p) => (
+                <li class="row-li">
+                  <a class="row" href={p.links[0]?.url}>
+                    <span class="row-icon" style={`background:${group.tint}`}>
+                      <Icon name={group.icon} />
+                    </span>
+                    <span class="row-body">
+                      <span class="row-title name">{p.title}</span>
+                      <span class="row-subtitle">{p.tagline[locale]}</span>
+                    </span>
+                    <span class="lang">{p.tech[0]}</span>
+                    <Icon name="chevron" class="chevron" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .other-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    align-items: start;
+  }
+  .row-li {
+    position: relative;
+  }
+  .row-li + .row-li::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 57px;
+    z-index: 1;
+    border-top: 0.5px solid var(--separator);
+  }
+  .name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 16px;
+  }
+  .row-subtitle {
+    display: block;
+    font-size: 14px;
+  }
+  .lang {
+    flex: none;
+    font-size: 13px;
+    color: var(--secondary-label);
+  }
+  @media (max-width: 760px) {
+    .other-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

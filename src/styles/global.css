@@ -1,321 +1,397 @@
 /* ==========================================================================
-   Man page.
-
-   The palette is the one the terminal SVG on my GitHub profile uses, so the
-   profile and this site read as one thing instead of two.
-
-   Rules this file keeps to, since breaking them is what made the previous
-   version look like every other generated portfolio: one typeface and it's
-   monospaced, no gradients, no shadows, no rounded corners, no scroll
-   animation. Colour carries meaning or it doesn't get used.
+   Design tokens — tirados das cores e materiais de sistema do iOS.
+   Os nomes seguem os da UIKit (label, secondaryLabel, systemGroupedBackground…)
+   para que dê para ler o CSS como se lê uma tela no Xcode.
    ========================================================================== */
 
 :root {
-  /* No webfont. Whatever the reader already has is the right one, and it
-     costs no round trip. */
-  --font: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-    "Liberation Mono", monospace;
+  /* SF Pro no iPhone e no Mac; Inter no resto, que é a parente mais próxima. */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter",
+    system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter",
+    system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-rounded: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont,
+    "Inter", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", SFMono-Regular, Menlo,
+    Consolas, monospace;
 
-  /* Man pages are written for 80 columns. */
-  --measure: 78ch;
-  --indent: 5ch;
+  --maxw: 1024px;
+  --gutter: clamp(16px, 4vw, 32px);
+  --radius-card: 22px;
+  --radius-group: 12px;
+  --radius-shot: 14px;
+  /* O squircle de ícone de app: 22,37% do lado. */
+  --icon-radius: 22.37%;
 
-  /* Tokyo Night Day */
-  --bg: #e1e2e7;
-  --bg-elev: #d6d8df;
-  --border: #b6b9c8;
-  --fg: #3760bf;
-  --fg-strong: #1a2b57;
-  --dim: #7a80a4;
-  --green: #587539;
-  --cyan: #007197;
-  --purple: #7847bd;
-  --orange: #b15c00;
-  --red: #c64343;
+  /* Claro */
+  --system-background: #ffffff;
+  --secondary-system-background: #f2f2f7;
+  --tertiary-system-background: #ffffff;
+  --grouped-background: #f2f2f7;
+  --grouped-cell: #ffffff;
+  --label: #000000;
+  --secondary-label: rgba(60, 60, 67, 0.6);
+  --tertiary-label: rgba(60, 60, 67, 0.3);
+  --separator: rgba(60, 60, 67, 0.29);
+  --opaque-separator: #c6c6c8;
+  --fill: rgba(120, 120, 128, 0.2);
+  --secondary-fill: rgba(120, 120, 128, 0.16);
+  --tertiary-fill: rgba(118, 118, 128, 0.12);
+  --tint: #007aff;
+  --green: #34c759;
+  --orange: #ff9500;
+  --purple: #af52de;
+  --indigo: #5856d6;
+  --teal: #30b0c7;
+  --bar-material: rgba(249, 249, 249, 0.78);
+  --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
 :root[data-theme="dark"] {
-  /* Tokyo Night */
-  --bg: #1a1b26;
-  --bg-elev: #16161e;
-  --border: #292e42;
-  --fg: #c0caf5;
-  --fg-strong: #ffffff;
-  --dim: #565f89;
-  --green: #9ece6a;
-  --cyan: #7dcfff;
-  --purple: #bb9af7;
-  --orange: #ff9e64;
-  --red: #f7768e;
+  --system-background: #000000;
+  --secondary-system-background: #1c1c1e;
+  --tertiary-system-background: #2c2c2e;
+  --grouped-background: #000000;
+  --grouped-cell: #1c1c1e;
+  --label: #ffffff;
+  --secondary-label: rgba(235, 235, 245, 0.6);
+  --tertiary-label: rgba(235, 235, 245, 0.3);
+  --separator: rgba(84, 84, 88, 0.65);
+  --opaque-separator: #38383a;
+  --fill: rgba(120, 120, 128, 0.36);
+  --secondary-fill: rgba(120, 120, 128, 0.32);
+  --tertiary-fill: rgba(118, 118, 128, 0.24);
+  --tint: #0a84ff;
+  --green: #30d158;
+  --orange: #ff9f0a;
+  --purple: #bf5af2;
+  --indigo: #5e5ce6;
+  --teal: #40c8e0;
+  --bar-material: rgba(22, 22, 23, 0.75);
+  --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
+/* ----- Reset enxuto ----- */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-
+* {
+  margin: 0;
+}
 html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 64px;
   -webkit-text-size-adjust: 100%;
 }
-
 body {
-  margin: 0;
-  padding: 2rem 1.25rem 4rem;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font);
-  font-size: 15px;
-  line-height: 1.6;
-  font-variant-ligatures: none;
+  font-family: var(--font-sans);
+  font-size: 17px; /* Body do Dynamic Type */
+  line-height: 1.47;
+  letter-spacing: -0.022em;
+  background: var(--system-background);
+  color: var(--label);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
-
-@media (min-width: 40rem) {
-  body {
-    padding: 3rem 2rem 6rem;
-  }
-}
-
-@media (max-width: 34rem) {
-  :root {
-    --indent: 2ch;
-  }
-}
-
-.page {
-  max-width: var(--measure);
-  margin: 0 auto;
-}
-
-img {
+img,
+picture,
+svg,
+video {
   display: block;
   max-width: 100%;
 }
-
-/* ----- Header: the NAME(1) ... TITLE ... NAME(1) line ------------------- */
-
-.man-head,
-.man-foot {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1ch;
-  color: var(--dim);
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.man-head {
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0.75rem;
-  margin-bottom: 2.5rem;
-}
-
-.man-foot {
-  border-top: 1px solid var(--border);
-  padding-top: 0.75rem;
-  margin-top: 3rem;
-}
-
-.man-head__mid {
-  color: var(--fg);
-}
-
-/* The repeated end column is the first thing to go when there's no room. */
-@media (max-width: 40rem) {
-  .man-head__end,
-  .man-foot__end {
-    display: none;
-  }
-}
-
-/* ----- Sections --------------------------------------------------------- */
-
-.section {
-  margin: 0 0 2.75rem;
-}
-
-.section__title {
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--fg-strong);
-  margin: 0 0 0.75rem;
-}
-
-/* The indent is the whole visual language of a man page. */
-.section__body {
-  padding-left: var(--indent);
-}
-
-.section__body > p {
-  margin: 0 0 1rem;
-  max-width: 68ch;
-}
-
-.section__body > p:last-child {
-  margin-bottom: 0;
-}
-
-/* ----- Inline ----------------------------------------------------------- */
-
 a {
-  color: var(--cyan);
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
+  color: inherit;
+  text-decoration: none;
 }
-
-a:hover {
-  color: var(--fg-strong);
-  background: var(--bg-elev);
+button {
+  font: inherit;
+  color: inherit;
 }
-
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--orange);
-  outline-offset: 2px;
-}
-
-.dim {
-  color: var(--dim);
-}
-
-.strong {
-  color: var(--fg-strong);
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+code,
+pre {
+  font-family: var(--font-mono);
 }
 
-/* ----- Listings: aligned columns, no table chrome ----------------------- */
-
-.listing {
-  display: grid;
-  gap: 1.75rem;
+/* ----- Layout ----- */
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.section {
+  padding-block: clamp(40px, 7vw, 72px);
+}
+.section-grouped {
+  background: var(--grouped-background);
 }
 
-.entry__head {
+/* Cabeçalho de seção como o da App Store: título forte e um "Ver tudo" à direita. */
+.section-header {
   display: flex;
-  flex-wrap: wrap;
   align-items: baseline;
-  gap: 0 1.5ch;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  border-bottom: 0.5px solid var(--separator);
+}
+.section-title {
+  font-size: clamp(24px, 3.4vw, 28px); /* Title 1 */
+}
+.section-action {
+  font-size: 17px;
+  color: var(--tint);
+  white-space: nowrap;
+}
+.section-action:hover {
+  text-decoration: underline;
+}
+.section-intro {
+  max-width: 62ch;
+  margin-top: -8px;
+  margin-bottom: 24px;
+  color: var(--secondary-label);
+  font-size: 15px;
+}
+.eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--secondary-label);
 }
 
-.entry__name {
-  color: var(--cyan);
+/* ----- Botões em cápsula ----- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 5px 16px;
+  border: 0;
+  border-radius: 980px;
+  background: var(--tertiary-fill);
+  color: var(--tint);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+.pill:hover {
+  background: var(--fill);
+}
+.pill:active {
+  transform: scale(0.97);
+}
+.pill-filled {
+  background: var(--tint);
+  color: #fff;
+}
+.pill-filled:hover {
+  background: color-mix(in srgb, var(--tint) 88%, #000);
+}
+.pill-large {
+  min-height: 44px;
+  padding: 10px 22px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* ----- Listas inset grouped ----- */
+.group {
+  list-style: none;
+  padding: 0;
+  background: var(--grouped-cell);
+  border-radius: var(--radius-group);
+  overflow: hidden;
+}
+.section-grouped .group {
+  background: var(--grouped-cell);
+}
+:root:not([data-theme="dark"]) .section:not(.section-grouped) .group {
+  background: var(--secondary-system-background);
+}
+.group-header {
+  padding: 0 16px 6px;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: var(--secondary-label);
+}
+.group-footer {
+  padding: 6px 16px 0;
+  font-size: 13px;
+  color: var(--secondary-label);
+}
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 11px 16px;
+}
+/* Separador recuado, como na UITableView: começa onde o texto começa. */
+.row + .row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: var(--separator-inset, 16px);
+  border-top: 0.5px solid var(--separator);
+}
+a.row:hover,
+summary.row:hover {
+  background: var(--tertiary-fill);
+}
+.row-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 7px;
+  color: #fff;
+}
+.row-icon svg {
+  width: 18px;
+  height: 18px;
+}
+.row-body {
+  flex: 1;
+  min-width: 0;
+}
+.row-title {
+  font-size: 17px;
+}
+.row-subtitle {
+  font-size: 15px;
+  color: var(--secondary-label);
+}
+.row-value {
+  flex: none;
+  max-width: 55%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--secondary-label);
+}
+.chevron {
+  flex: none;
+  width: 8px;
+  height: 13px;
+  color: var(--tertiary-label);
+}
+
+/* ----- Ícone de app ----- */
+.app-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--icon-radius);
+  /* A borda fina que a App Store põe em ícones claros sobre fundo claro. */
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.12);
+  background: var(--secondary-system-background);
+  color: #fff;
+  font-family: var(--font-rounded);
   font-weight: 700;
 }
-
-.entry__meta {
-  color: var(--dim);
-  font-size: 0.9em;
+.app-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.entry__desc,
-.entry__links {
-  max-width: 68ch;
-}
-
-.entry__desc {
-  margin: 0.25rem 0 0;
-}
-
-.entry__links {
-  margin-top: 0.35rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 2ch;
-  font-size: 0.9em;
-}
-
-.shots {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 0.75rem;
-}
-
-.shots img {
-  height: 150px;
-  width: auto;
-  border: 1px solid var(--border);
-}
-
-/* ----- Key/value rows, for the live numbers ----------------------------- */
-
-.kv {
-  display: grid;
-  grid-template-columns: 18ch 1fr;
-  gap: 0.15rem 1ch;
-  margin: 0;
-}
-
-@media (max-width: 34rem) {
-  .kv {
-    grid-template-columns: 13ch 1fr;
-  }
-}
-
-.kv dt {
-  color: var(--dim);
-}
-
-.kv dd {
-  margin: 0;
-  color: var(--fg-strong);
-}
-
-/* Values that came from the service rather than from a file. */
-.live {
-  color: var(--green);
-}
-
-/* ----- Controls: text, not buttons -------------------------------------- */
-
-.controls {
-  display: flex;
-  gap: 2ch;
-  font-size: 0.9em;
-  text-transform: none;
+/* ----- Etiquetas ----- */
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--tertiary-fill);
+  color: var(--secondary-label);
+  font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0;
 }
 
-.control {
-  background: none;
-  border: 0;
-  padding: 0;
-  font: inherit;
-  color: var(--dim);
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+/* Código no meio do texto */
+p code,
+li code,
+dd code {
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--tertiary-fill);
+  font-size: 0.86em;
+  letter-spacing: 0;
 }
 
-.control:hover,
-.control[aria-current="true"] {
-  color: var(--fg-strong);
+/* ----- Entrada suave ----- */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
-/* ----- Skip link -------------------------------------------------------- */
-
+/* ----- Acessibilidade ----- */
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--tint) 60%, transparent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
 .skip-link {
   position: absolute;
-  left: -9999px;
+  top: -3rem;
+  left: 0.5rem;
+  z-index: 100;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  background: var(--tint);
+  color: #fff;
+  transition: top 0.2s ease;
 }
-
 .skip-link:focus {
-  left: 1rem;
-  top: 1rem;
-  background: var(--bg-elev);
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border);
+  top: 0.5rem;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
-/* Spacing that only a couple of places need; still cheaper than inline styles. */
-.note {
-  margin-top: 1.5rem;
-}
-
-.listing--spaced,
-.kv--spaced {
-  margin-top: 1.25rem;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }

@@ -1,0 +1,310 @@
+---
+import type { Locale, Project } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import AppIcon from "./AppIcon.astro";
+import Icon from "./Icon.astro";
+import { Code } from "astro:components";
+import { xcodeDark } from "../data/xcodeTheme";
+
+interface Props {
+  project: Project;
+  locale: Locale;
+}
+const { project, locale } = Astro.props;
+const t = useTranslations(locale);
+
+const primary = project.links[0];
+const secondary = project.links.slice(1);
+const buttonLabel = primary?.label === "App Store" ? t("apps.get") : primary ? t("apps.code") : null;
+const meta = [project.category?.[locale], project.team?.[locale]].filter(Boolean).join(" · ");
+---
+
+<!--
+  A ficha de um app como a App Store mostra num resultado de busca: ícone,
+  nome, subtítulo, botão em cápsula, e as capturas logo abaixo.
+-->
+<article class="app reveal" id={project.id}>
+  <header class="app-head">
+    <AppIcon project={project} size={72} />
+    <div class="app-titles">
+      {project.badge && <p class="app-badge">{project.badge[locale]}</p>}
+      <h3 class="app-name">{project.title}</h3>
+      <p class="app-subtitle">{project.tagline[locale]}</p>
+      {meta && <p class="app-meta">{meta}</p>}
+    </div>
+    {
+      primary ? (
+        <a class="pill app-get" href={primary.url} aria-label={`${buttonLabel}: ${project.title} (${primary.label})`}>
+          {buttonLabel}
+        </a>
+      ) : (
+        <span class="pill app-get app-get-disabled">
+          {project.status === "upcoming" ? t("apps.soon") : t("apps.privateShort")}
+        </span>
+      )
+    }
+  </header>
+
+  {
+    project.images && project.images.length > 0 && (
+      <ul class="shots" aria-label={`${project.title}: screenshots`}>
+        {project.images.map((src, i) => (
+          <li>
+            <img src={src} alt={`${project.title} — ${i + 1}`} loading="lazy" decoding="async" />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  <p class="app-desc">{project.description[locale]}</p>
+
+  <div class="app-foot">
+    <ul class="app-platforms" aria-label="platforms">
+      {project.platforms?.map((p) => <li>{p}</li>)}
+    </ul>
+    <ul class="app-tech">
+      {project.tech.map((tech) => <li class="tag">{tech}</li>)}
+    </ul>
+  </div>
+
+  {
+    (secondary.length > 0 || (!primary && project.snippet)) && (
+      <p class="app-links">
+        {secondary.map((l) => (
+          <a href={l.url}>
+            {l.label} <Icon name="arrow" class="arrow" />
+          </a>
+        ))}
+      </p>
+    )
+  }
+
+  {
+    project.snippet && (
+      <details class="snippet">
+        <summary>
+          <Icon name="code" class="snippet-icon" />
+          <span>{t("apps.snippet")}</span>
+          <Icon name="chevron" class="snippet-chevron" />
+        </summary>
+        <p class="snippet-note">{project.snippet.note[locale]}</p>
+        <figure class="snippet-code">
+          <figcaption>{project.snippet.file}</figcaption>
+          <Code code={project.snippet.code} lang="swift" theme={xcodeDark} />
+        </figure>
+      </details>
+    )
+  }
+</article>
+
+<style>
+  .app {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+    padding: 20px;
+    border-radius: var(--radius-card);
+    background: var(--grouped-cell);
+  }
+  .app-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .app-titles {
+    flex: 1;
+    min-width: 0;
+  }
+  .app-badge {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--tint);
+  }
+  .app-name {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+  }
+  .app-subtitle {
+    font-size: 15px;
+    line-height: 1.3;
+    color: var(--secondary-label);
+  }
+  .app-meta {
+    margin-top: 2px;
+    font-size: 13px;
+    color: var(--tertiary-label);
+  }
+  :global(:root[data-theme="dark"]) .app-meta {
+    color: var(--secondary-label);
+  }
+  .app-get {
+    align-self: center;
+    min-width: 74px;
+  }
+  .app-get-disabled {
+    color: var(--secondary-label);
+    cursor: default;
+  }
+  .app-get-disabled:hover {
+    background: var(--tertiary-fill);
+  }
+
+  /* Capturas: rolagem horizontal com snap, altura fixa, largura pela proporção. */
+  .shots {
+    display: flex;
+    gap: 10px;
+    margin-inline: -20px;
+    padding: 0 20px 4px;
+    overflow-x: auto;
+    list-style: none;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 20px;
+    scrollbar-width: none;
+  }
+  .shots::-webkit-scrollbar {
+    display: none;
+  }
+  .shots li {
+    flex: none;
+    scroll-snap-align: start;
+  }
+  .shots img {
+    height: 300px;
+    width: auto;
+    border-radius: var(--radius-shot);
+    box-shadow: inset 0 0 0 0.5px var(--separator);
+    border: 0.5px solid var(--separator);
+    background: var(--secondary-system-background);
+  }
+
+  .app-desc {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .app-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin-top: auto;
+  }
+  .app-platforms {
+    display: flex;
+    gap: 6px;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: var(--secondary-label);
+  }
+  .app-platforms li + li::before {
+    content: "·";
+    margin-right: 6px;
+  }
+  .app-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 0;
+    list-style: none;
+  }
+  .app-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 15px;
+  }
+  .app-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--tint);
+  }
+  .app-links a:hover {
+    text-decoration: underline;
+  }
+  .app-links :global(.arrow) {
+    width: 13px;
+    height: 13px;
+  }
+
+  /* O trecho de código fica fechado: quem quer olhar, abre. */
+  .snippet {
+    border-top: 0.5px solid var(--separator);
+    padding-top: 10px;
+  }
+  .snippet summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    color: var(--tint);
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .snippet summary::-webkit-details-marker {
+    display: none;
+  }
+  .snippet :global(.snippet-icon) {
+    width: 17px;
+    height: 17px;
+  }
+  .snippet :global(.snippet-chevron) {
+    width: 13px;
+    height: 13px;
+    margin-left: auto;
+    color: var(--tertiary-label);
+    transition: transform 0.2s ease;
+  }
+  .snippet[open] :global(.snippet-chevron) {
+    transform: rotate(90deg);
+  }
+  .snippet-note {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--secondary-label);
+  }
+  /* Tema do editor do Xcode (Default Dark), nos dois modos: código é código. */
+  .snippet-code {
+    margin: 10px 0 0;
+    border-radius: 12px;
+    background: #1f1f24;
+    overflow: hidden;
+  }
+  .snippet-code figcaption {
+    padding: 8px 14px;
+    border-bottom: 0.5px solid #3a3a3e;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #8e8e93;
+  }
+  .snippet-code :global(pre) {
+    margin: 0;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 12.5px;
+    line-height: 1.55;
+    letter-spacing: 0;
+    background: transparent !important;
+    tab-size: 4;
+  }
+
+  @media (max-width: 640px) {
+    .app {
+      padding: 16px;
+      border-radius: 18px;
+    }
+    .shots {
+      margin-inline: -16px;
+      padding-inline: 16px;
+      scroll-padding-inline: 16px;
+    }
+    .shots img {
+      height: 240px;
+    }
+  }
+</style>

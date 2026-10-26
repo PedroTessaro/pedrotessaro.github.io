@@ -1,0 +1,41 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import { name } from "../data/profile";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© {year} {name}</span>
+    <span>{t("footer.builtWith")}</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: 24px calc(24px + env(safe-area-inset-bottom));
+    border-top: 0.5px solid var(--separator);
+    background: var(--grouped-background);
+    font-size: 12px;
+    color: var(--secondary-label);
+  }
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  /* Espaço para a tab bar no celular. */
+  @media (max-width: 760px) {
+    .footer {
+      padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    }
+  }
+</style>

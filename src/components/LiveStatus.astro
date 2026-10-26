@@ -1,0 +1,79 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import { fetchLive } from "../data/live";
+import Icon from "./Icon.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+// Lido no build. Se o serviço estiver fora, cada valor mostra "indisponível"
+// e o script do BaseLayout tenta de novo no navegador.
+const live = await fetchLive();
+const unavailable = t("status.unavailable");
+
+const rows = [
+  { key: "github.repos", label: t("status.repos"), value: live?.github.repos },
+  { key: "github.stars", label: t("status.stars"), value: live?.github.stars },
+  { key: "github.commits_this_year", label: t("status.commits"), value: live?.github.commits_this_year },
+  { key: "ci.status", label: t("status.ci"), value: live?.ci?.status },
+  { key: "ci.tests", label: t("status.tests"), value: live?.ci?.tests },
+  { key: "last_commit.message", label: t("status.lastCommit"), value: live?.last_commit?.message },
+];
+---
+
+<section id="live" class="section section-grouped">
+  <div class="container">
+    <header class="section-header">
+      <h2 class="section-title">
+        <span class="live-dot" aria-hidden="true"></span>{t("live.title")}
+      </h2>
+      <a class="section-action" href={`/${locale}/status/`}>{t("live.link")}</a>
+    </header>
+    <p class="section-intro">{t("live.intro")}</p>
+
+    <dl class="group reveal">
+      {
+        rows.map((row) => (
+          <div class="row">
+            <dt class="row-title">{row.label}</dt>
+            <dd class="row-value" data-live={row.key}>
+              {row.value ?? unavailable}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .live-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    vertical-align: middle;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--green) 60%, transparent);
+    animation: pulse 2.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    70% {
+      box-shadow: 0 0 0 8px transparent;
+    }
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+  .row-title {
+    flex: 1;
+  }
+  .row-value {
+    font-variant-numeric: tabular-nums;
+  }
+</style>

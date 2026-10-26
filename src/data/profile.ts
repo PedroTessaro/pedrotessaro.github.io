@@ -1,41 +1,65 @@
-import type { Localized, SkillGroup, SocialLink } from "./types";
+import type { IconName, Localized, SkillGroup, SocialLink } from "./types";
 
 export const name = "Pedro Tessaro Augusto";
 
-/** Usado no <title> e no cabeçalho da man page. */
+/** Usado no <title> da página de status. */
 export const shortName = "Pedro Tessaro";
 
 export const role: Localized = {
-  pt: "Engenheiro de Backend",
-  en: "Backend Engineer",
+  pt: "Desenvolvedor iOS",
+  en: "iOS Developer",
 };
 
-/** A linha SYNOPSIS. Ordem importa: é o que é lido primeiro. */
-export const stack = [
-  "go",
-  "java",
-  "c/c++",
-  "postgresql",
-  "docker",
-  "redis",
-];
-
-export const availability: Localized = {
-  pt: "aberto a vagas de backend · remoto ou São Paulo · pt/en",
-  en: "open to backend roles · remote or São Paulo · en/pt",
+export const tagline: Localized = {
+  pt: "Faço apps para o ecossistema Apple, contribuo com o compilador Swift e escrevo a Sword, uma linguagem de sistemas.",
+  en: "I build apps for the Apple ecosystem, contribute to the Swift compiler and write Sword, a systems language.",
 };
 
 export const bio: Localized = {
-  pt: "Trabalho com backend, principalmente em Go. O que me interessa é o que acontece entre a requisição chegar e a linha ser gravada: concorrência, persistência, cache.\n\nComecei por baixo e ainda volto lá. Escrevi um montador de duas passagens, um interpretador de pilha, um editor de texto a partir do modo raw do terminal.\n\nTenho quatro apps publicados na App Store. A parte difícil neles foi a sincronização — conflitos, fila offline, consistência entre dispositivos.\n\nEstudo Ciência da Computação. Também sou pianista e professor de piano, com prêmios em concursos internacionais.",
-  en: "I work on backend, mostly in Go. What interests me is what happens between a request arriving and a row being written: concurrency, persistence, caching.\n\nI started from the bottom and still go back there. I've written a two-pass assembler, a stack interpreter, a text editor from the terminal's raw mode.\n\nI have four apps published on the App Store. The hard part in them was sync — conflicts, offline queue, consistency across devices.\n\nI study Computer Science. I'm also a pianist and piano teacher, with prizes in international competitions.",
+  pt: "Sou desenvolvedor iOS na Apple Developer Academy, no Mackenzie, em São Paulo. Tenho apps publicados na App Store: NotADiary, um diário com fotos sincronizado por CloudKit; Karthos, com ranking global no CloudKit e partidas locais por MultipeerConnectivity; e DeckExtinction, um jogo narrativo construído sobre uma árvore de decisões com GameplayKit. O Mola, um editor de animação para iPad feito em equipe, está na fila do App Nominations da Apple, e o ÖRLÖG Companion roda a mesa de um RPG entre iPhone, iPad e Mac.\n\nGosto de entender o que acontece por baixo do Swift. Mandei correções para o compilador Swift e para o swift-async-algorithms, e escrevo a Sword, uma linguagem compilada que recusa programas com data race. Antes disso, escrevi um montador, um interpretador e um editor de texto de terminal.\n\nEstudo Ciência da Computação. Também sou pianista e professor de piano, com prêmios em concursos internacionais.",
+  en: "I'm an iOS developer at the Apple Developer Academy, at Mackenzie, in São Paulo. I have apps on the App Store: NotADiary, a photo journal synced through CloudKit; Karthos, with a global ranking on CloudKit and local matches over MultipeerConnectivity; and DeckExtinction, a narrative game built on a GameplayKit decision tree. Mola, an iPad animation editor built with a team, is queued for Apple's App Nominations, and ÖRLÖG Companion runs the table of an RPG across iPhone, iPad and Mac.\n\nI like knowing what happens underneath Swift. I've sent fixes to the Swift compiler and to swift-async-algorithms, and I write Sword, a compiled language that refuses programs with data races. Before that I wrote an assembler, an interpreter and a terminal text editor.\n\nI study Computer Science. I'm also a pianist and piano teacher, with prizes in international competitions.",
 };
+
+/** A lista "Informações", como a da ficha de um app na App Store. */
+export const info: { icon: IconName; tint: string; label: Localized; value: Localized }[] = [
+  {
+    icon: "apple",
+    tint: "#1c1c1e",
+    label: { pt: "Academia", en: "Academy" },
+    value: { pt: "Apple Developer Academy", en: "Apple Developer Academy" },
+  },
+  {
+    icon: "graduation",
+    tint: "var(--indigo)",
+    label: { pt: "Formação", en: "Education" },
+    value: { pt: "Ciência da Computação, Mackenzie", en: "Computer Science, Mackenzie" },
+  },
+  {
+    icon: "location",
+    tint: "var(--green)",
+    label: { pt: "Local", en: "Location" },
+    value: { pt: "São Paulo · remoto", en: "São Paulo · remote" },
+  },
+  {
+    icon: "globe",
+    tint: "var(--tint)",
+    label: { pt: "Idiomas", en: "Languages" },
+    value: { pt: "Português, inglês fluente", en: "Portuguese, fluent English" },
+  },
+  {
+    icon: "music",
+    tint: "var(--orange)",
+    label: { pt: "Também", en: "Also" },
+    value: { pt: "Pianista premiado", en: "Award-winning pianist" },
+  },
+];
 
 export const email = "ptssar22@gmail.com";
 
 export const socials: SocialLink[] = [
-  { label: "github(1)", url: "https://github.com/PedroTessaro" },
-  { label: "linkedin(1)", url: "https://linkedin.com/in/pedrotessaro" },
-  { label: "email(1)", url: `mailto:${email}` },
+  { label: "GitHub", url: "https://github.com/PedroTessaro", icon: "github" },
+  { label: "LinkedIn", url: "https://linkedin.com/in/pedrotessaro", icon: "linkedin" },
+  { label: "Email", url: `mailto:${email}`, icon: "email" },
 ];
 
 export const resume = {
@@ -45,30 +69,26 @@ export const resume = {
 
 export const skills: SkillGroup[] = [
   {
-    area: "backend",
-    title: { pt: "Backend", en: "Backend" },
+    area: "ios",
+    title: { pt: "iOS & Apple", en: "iOS & Apple" },
     items: [
-      "Go",
-      "Java",
-      "HTTP APIs",
-      "PostgreSQL",
-      "Redis",
-      "Docker",
-      "CI/CD",
-      "Prometheus",
+      "Swift",
+      "SwiftUI",
+      "UIKit",
+      "Swift Concurrency",
+      "CloudKit",
+      "Core Data",
+      "Metal",
+      "MultipeerConnectivity",
+      "SpriteKit",
+      "GameplayKit",
+      "tvOS",
+      "Xcode",
     ],
   },
   {
     area: "systems",
-    title: { pt: "Baixo nível", en: "Low-level" },
-    items: [
-      "C",
-      "C++",
-      "Assembly x86",
-      "Concorrência",
-      "Gerência de memória",
-      "Estruturas de dados",
-      "Compiladores",
-    ],
+    title: { pt: "Compiladores & Sistemas", en: "Compilers & Systems" },
+    items: ["C++", "C", "LLVM", "SIL", "Assembly x86", "Concorrência", "Go"],
   },
 ];

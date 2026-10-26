@@ -1,0 +1,147 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import { contributions } from "../data/contributions";
+import InlineCode from "./InlineCode.astro";
+import Icon from "./Icon.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const merged = contributions.filter((c) => c.state === "merged");
+const open = contributions.filter((c) => c.state === "open");
+const allPRs =
+  "https://github.com/pulls?q=is%3Apr+author%3APedroTessaro+org%3Aswiftlang+org%3Aapple";
+const groups = [
+  { key: "contrib.merged", items: merged },
+  { key: "contrib.open", items: open },
+] as const;
+---
+
+<section id="swift" class="section">
+  <div class="container">
+    <header class="section-header">
+      <h2 class="section-title">{t("contrib.title")}</h2>
+      <a class="section-action" href={allPRs}>{t("contrib.all")}</a>
+    </header>
+    <p class="section-intro">{t("contrib.intro")}</p>
+
+    <div class="contrib-groups">
+      {
+        groups.map((group) => (
+          <div class="reveal">
+            <h3 class="group-header">
+              {t(group.key)} · {group.items.length}
+            </h3>
+            <ul class="group" style="--separator-inset: 57px">
+              {group.items.map((c) => (
+                <li class="row-wrap">
+                  <details open={c.state === "merged"}>
+                    <summary class="row">
+                      <span class={`row-icon state-${c.state}`}>
+                        <Icon name={c.state === "merged" ? "swift" : "code"} />
+                      </span>
+                      <span class="row-body">
+                        <span class="row-title pr-title">{c.title}</span>
+                        <span class="row-subtitle">
+                          {c.repo} #{c.number}
+                        </span>
+                      </span>
+                      <Icon name="chevron" class="chevron" />
+                    </summary>
+                    <div class="pr-detail">
+                      <p>
+                        <InlineCode text={c.summary[locale]} />
+                      </p>
+                      <p class="pr-links">
+                        <a href={`https://github.com/${c.repo}/pull/${c.number}`}>
+                          Pull request #{c.number}
+                        </a>
+                        {c.fixes && (
+                          <a href={`https://github.com/${c.repo}/issues/${c.fixes}`}>
+                            {t("contrib.fixes")} #{c.fixes}
+                          </a>
+                        )}
+                      </p>
+                    </div>
+                  </details>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .contrib-groups {
+    display: grid;
+    gap: 28px;
+  }
+  .row-wrap {
+    position: relative;
+  }
+  .row-wrap + .row-wrap::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 57px;
+    border-top: 0.5px solid var(--separator);
+  }
+  summary.row {
+    list-style: none;
+    cursor: pointer;
+  }
+  summary.row::-webkit-details-marker {
+    display: none;
+  }
+  .state-merged {
+    background: linear-gradient(160deg, #ff8a3d, #f05138);
+  }
+  .state-open {
+    background: var(--green);
+  }
+  .pr-title {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+  }
+  .row-subtitle {
+    display: block;
+    font-size: 13px;
+  }
+  details[open] :global(.chevron) {
+    transform: rotate(90deg);
+  }
+  :global(.chevron) {
+    transition: transform 0.2s ease;
+  }
+  .pr-detail {
+    padding: 0 16px 14px 57px;
+    font-size: 15px;
+    color: var(--secondary-label);
+  }
+  .pr-detail p {
+    max-width: 75ch;
+  }
+  .pr-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .pr-links a {
+    color: var(--tint);
+  }
+  .pr-links a:hover {
+    text-decoration: underline;
+  }
+</style>

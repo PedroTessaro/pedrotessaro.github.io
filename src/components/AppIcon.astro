@@ -1,0 +1,21 @@
+---
+import type { Project } from "../data/types";
+
+interface Props {
+  project: Project;
+  size: number;
+}
+const { project, size } = Astro.props;
+// Sem ícone de verdade, a inicial sobre a cor do app, como um placeholder do Xcode.
+const fallback = `background: linear-gradient(160deg, color-mix(in srgb, ${project.tint ?? "#8e8e93"} 70%, #fff), ${project.tint ?? "#8e8e93"}); font-size: ${Math.round(size * 0.46)}px`;
+---
+
+<span class="app-icon" style={`width:${size}px;height:${size}px;${project.icon ? "" : fallback}`}>
+  {
+    project.icon ? (
+      <img src={project.icon} alt="" width={size} height={size} loading="lazy" decoding="async" />
+    ) : (
+      <span aria-hidden="true">{project.title[0]}</span>
+    )
+  }
+</span>

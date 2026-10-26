@@ -1,0 +1,269 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import {
+  repoUrl,
+  release,
+  lede,
+  principles,
+  facts,
+  stdlib,
+  sample,
+  sampleNote,
+} from "../data/sword";
+import InlineCode from "./InlineCode.astro";
+import { Code } from "astro:components";
+import { xcodeDark } from "../data/xcodeTheme";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<section id="sword" class="section section-grouped">
+  <div class="container">
+    <!-- Um cartão de história da App Store, escuro nos dois temas. -->
+    <article class="story reveal">
+      <header class="story-head">
+        <p class="story-eyebrow">{t("sword.kicker")}</p>
+        <h2 class="story-title">{t("sword.title")}</h2>
+        <p class="story-lede">{lede[locale]}</p>
+        <p class="story-release">
+          {t("sword.release")} <strong>{release.version}</strong> “{release.name}”
+        </p>
+      </header>
+
+      <dl class="facts">
+        {
+          facts.map((f) => (
+            <div class="fact">
+              <dt>{f.value}</dt>
+              <dd>{f.label[locale]}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <div class="story-grid">
+        <figure class="code">
+          <figcaption class="code-bar">
+            <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+            <code>main.sword</code>
+          </figcaption>
+          <Code code={sample} lang="go" theme={xcodeDark} />
+          <p class="code-note"><InlineCode text={sampleNote[locale]} /></p>
+        </figure>
+
+        <ul class="principles">
+          {
+            principles.map((p) => (
+              <li>
+                <h3>{p.title[locale]}</h3>
+                <p>
+                  <InlineCode text={p.body[locale]} />
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <p class="stdlib"><InlineCode text={stdlib[locale]} /></p>
+
+      <div class="story-links">
+        <a class="pill pill-large story-primary" href={repoUrl}>{t("sword.repo")}</a>
+        <a class="pill pill-large story-secondary" href={`${repoUrl}/blob/main/docs/tour.md`}>{t("sword.tour")}</a>
+        <a class="pill pill-large story-secondary" href={`${repoUrl}/blob/main/docs/why.md`}>{t("sword.why")}</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .story {
+    padding: clamp(24px, 5vw, 48px);
+    border-radius: var(--radius-card);
+    background:
+      radial-gradient(90% 60% at 100% 0%, rgba(94, 92, 230, 0.35) 0%, transparent 60%),
+      radial-gradient(70% 50% at 0% 100%, rgba(64, 200, 224, 0.18) 0%, transparent 60%),
+      #0b0b0f;
+    color: #f5f5f7;
+    box-shadow: var(--card-shadow);
+  }
+  .story-eyebrow {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(235, 235, 245, 0.6);
+  }
+  .story-title {
+    margin-top: 4px;
+    font-size: clamp(44px, 9vw, 80px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    background: linear-gradient(120deg, #ffffff 30%, #a5a4ff 70%, #64d2ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .story-lede {
+    max-width: 58ch;
+    margin-top: 12px;
+    font-size: clamp(17px, 2.2vw, 21px);
+    line-height: 1.4;
+    color: rgba(235, 235, 245, 0.85);
+  }
+  .story-release {
+    margin-top: 12px;
+    font-size: 13px;
+    color: rgba(235, 235, 245, 0.6);
+  }
+  .story-release strong {
+    color: #64d2ff;
+    font-weight: 600;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 28px;
+    border-block: 0.5px solid rgba(84, 84, 88, 0.65);
+  }
+  .fact {
+    padding: 14px 12px;
+  }
+  .fact + .fact {
+    border-left: 0.5px solid rgba(84, 84, 88, 0.65);
+  }
+  .fact dt {
+    font-family: var(--font-rounded);
+    font-size: clamp(20px, 3vw, 26px);
+    font-weight: 700;
+    color: #fff;
+  }
+  .fact dd {
+    font-size: 13px;
+    color: rgba(235, 235, 245, 0.6);
+  }
+
+  .story-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 40px);
+    align-items: start;
+    margin-top: 32px;
+  }
+  .code {
+    margin: 0;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #1f1f24;
+    border: 0.5px solid #3a3a3e;
+  }
+  .code-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-bottom: 0.5px solid #3a3a3e;
+  }
+  .code-bar span {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #ff5f57;
+  }
+  .code-bar span:nth-child(2) {
+    background: #febc2e;
+  }
+  .code-bar span:nth-child(3) {
+    background: #28c840;
+  }
+  .code-bar code {
+    margin-left: 8px;
+    font-size: 12px;
+    color: #8e8e93;
+  }
+  .code :global(pre) {
+    margin: 0;
+    padding: 14px;
+    overflow-x: auto;
+    background: transparent !important;
+    font-size: 12.5px;
+    line-height: 1.55;
+    letter-spacing: 0;
+  }
+  .code-note {
+    padding: 12px 14px 14px;
+    border-top: 0.5px solid #3a3a3e;
+    font-size: 14px;
+    color: rgba(235, 235, 245, 0.75);
+  }
+
+  .principles {
+    display: grid;
+    gap: 20px;
+    padding: 0;
+    list-style: none;
+  }
+  .principles h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .principles p {
+    margin-top: 2px;
+    font-size: 15px;
+    color: rgba(235, 235, 245, 0.7);
+  }
+  .story :global(p code) {
+    background: rgba(118, 118, 128, 0.3);
+    color: #64d2ff;
+  }
+
+  .stdlib {
+    max-width: 75ch;
+    margin-top: 32px;
+    font-size: 15px;
+    color: rgba(235, 235, 245, 0.7);
+  }
+  .story-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .story-primary {
+    background: #fff;
+    color: #000;
+  }
+  .story-primary:hover {
+    background: #e5e5ea;
+  }
+  .story-secondary {
+    background: rgba(118, 118, 128, 0.3);
+    color: #fff;
+  }
+  .story-secondary:hover {
+    background: rgba(118, 118, 128, 0.45);
+  }
+
+  @media (max-width: 860px) {
+    .story-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 640px) {
+    .facts {
+      grid-template-columns: 1fr 1fr;
+    }
+    .fact:nth-child(3) {
+      border-left: 0;
+    }
+    .fact:nth-child(n + 3) {
+      border-top: 0.5px solid rgba(84, 84, 88, 0.65);
+    }
+  }
+</style>

@@ -1,0 +1,79 @@
+---
+import type { IconName, Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import { email, socials, resume } from "../data/profile";
+import Icon from "./Icon.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const rows: { icon: IconName; tint: string; label: string; value: string; url: string }[] = [
+  { icon: "envelope", tint: "var(--tint)", label: "Email", value: email, url: `mailto:${email}` },
+  { icon: "doc", tint: "var(--orange)", label: t("contact.resume"), value: "PDF", url: resume[locale] },
+  ...socials
+    .filter((s) => s.icon !== "email")
+    .map((s) => ({
+      icon: s.icon as IconName,
+      tint: s.icon === "linkedin" ? "#0a66c2" : "#1c1c1e",
+      label: s.label,
+      value: s.url.replace(/^https?:\/\/(www\.)?/, ""),
+      url: s.url,
+    })),
+];
+---
+
+<section id="contact" class="section">
+  <div class="container contact">
+    <header class="section-header">
+      <h2 class="section-title">{t("contact.title")}</h2>
+    </header>
+    <p class="section-intro">{t("contact.intro")}</p>
+
+    <ul class="group reveal" style="--separator-inset: 57px">
+      {
+        rows.map((r) => (
+          <li class="row-li">
+            <a class="row" href={r.url}>
+              <span class="row-icon" style={`background:${r.tint}`}>
+                <Icon name={r.icon} />
+              </span>
+              <span class="row-title">{r.label}</span>
+              <span class="row-value">{r.value}</span>
+              <Icon name="chevron" class="chevron" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <a class="pill pill-filled pill-large mail" href={`mailto:${email}`}>{t("contact.email")}</a>
+  </div>
+</section>
+
+<style>
+  .contact .group,
+  .contact .section-intro {
+    max-width: 720px;
+  }
+  .row-li {
+    position: relative;
+  }
+  .row-li + .row-li::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 57px;
+    z-index: 1;
+    border-top: 0.5px solid var(--separator);
+  }
+  .row-title {
+    flex: 1;
+  }
+  .mail {
+    margin-top: 20px;
+  }
+</style>

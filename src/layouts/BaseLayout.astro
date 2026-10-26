@@ -1,35 +1,66 @@
 ---
 import "../styles/global.css";
 import type { Locale } from "../data/types";
-import { name, role } from "../data/profile";
+import { name, role, tagline } from "../data/profile";
+import { structuredData } from "../data/structured";
 
 interface Props {
   locale: Locale;
   title?: string;
   description?: string;
+  /** Caminho dentro do idioma, para canonical e hreflang. Vazio na home. */
+  path?: string;
 }
 
-const { locale, title, description } = Astro.props;
+const { locale, title, description, path = "" } = Astro.props;
 const pageTitle = title ?? `${name} — ${role[locale]}`;
-const pageDesc = description ?? role[locale];
+const pageDesc = description ?? tagline[locale];
+const site = Astro.site ?? new URL("https://pedrotessaro.github.io");
+const canonical = new URL(`/${locale}/${path}`, site).href;
+const ogImage = new URL(`/og-${locale}.png`, site).href;
 ---
 
 <!doctype html>
-<html lang={locale}>
+<html lang={locale === "pt" ? "pt-BR" : "en"}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- SF Pro já está no iPhone e no Mac; Inter só entra onde ela não existe. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
 
     <title>{pageTitle}</title>
     <meta name="description" content={pageDesc} />
+    <meta name="author" content={name} />
     <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="pt-BR" href={new URL(`/pt/${path}`, site).href} />
+    <link rel="alternate" hreflang="en" href={new URL(`/en/${path}`, site).href} />
+    <link rel="alternate" hreflang="x-default" href={new URL(`/pt/${path}`, site).href} />
+    <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="profile" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDesc} />
-    <meta property="og:locale" content={locale} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={locale === "pt" ? "pt_BR" : "en_US"} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData(locale))} />
 
     <!-- Theme before first paint, so there's no flash. -->
     <script is:inline>
@@ -49,6 +80,36 @@ const pageDesc = description ?? role[locale];
   </head>
   <body>
     <slot />
+
+    <!-- Animação de entrada sutil ao rolar -->
+    <script is:inline>
+      (function () {
+        var reduce = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+        var els = document.querySelectorAll(".reveal");
+        if (reduce || !("IntersectionObserver" in window)) {
+          els.forEach(function (el) {
+            el.classList.add("is-visible");
+          });
+          return;
+        }
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12 }
+        );
+        els.forEach(function (el) {
+          io.observe(el);
+        });
+      })();
+    </script>
 
     <!--
       The numbers in the HTML were read at build time. This tops them up with

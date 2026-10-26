@@ -1,0 +1,100 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import { bio, info, skills } from "../data/profile";
+import Icon from "./Icon.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const paragraphs = bio[locale].split("\n\n");
+---
+
+<section id="about" class="section">
+  <div class="container">
+    <header class="section-header">
+      <h2 class="section-title">{t("about.title")}</h2>
+    </header>
+
+    <div class="about-grid">
+      <div class="about-bio reveal">
+        {paragraphs.map((p) => <p>{p}</p>)}
+      </div>
+
+      <div class="about-side reveal">
+        <h3 class="group-header">{t("about.info")}</h3>
+        <dl class="group" style="--separator-inset: 57px">
+          {
+            info.map((row) => (
+              <div class="row">
+                <span class="row-icon" style={`background:${row.tint}`}>
+                  <Icon name={row.icon} />
+                </span>
+                <dt class="row-title">{row.label[locale]}</dt>
+                <dd class="row-value">{row.value[locale]}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        {
+          skills.map((group) => (
+            <div class="skills">
+              <h3 class="group-header">{group.title[locale]}</h3>
+              <ul>
+                {group.items.map((item) => (
+                  <li class="tag">{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(24px, 5vw, 56px);
+    align-items: start;
+  }
+  .about-bio p {
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  .about-bio p + p {
+    margin-top: 14px;
+  }
+  .about-bio p:not(:first-child) {
+    color: var(--secondary-label);
+  }
+  .row-title {
+    flex: 1;
+  }
+  .row-value {
+    text-align: right;
+    white-space: normal;
+    max-width: 60%;
+    font-size: 15px;
+  }
+  .skills {
+    margin-top: 24px;
+  }
+  .skills ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 16px;
+    list-style: none;
+  }
+  @media (max-width: 760px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

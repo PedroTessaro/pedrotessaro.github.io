@@ -1,0 +1,44 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+
+interface Props {
+  locale: Locale;
+  /** Caminho dentro do idioma, para trocar de idioma sem sair da página. */
+  path?: string;
+}
+const { locale, path = "" } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<!-- Um segmented control de dois segmentos; o ativo é o idioma da página. -->
+<div class="segmented" role="group" aria-label={t("lang.toggle")}>
+  <a href={`/pt/${path}`} class={locale === "pt" ? "active" : ""} aria-current={locale === "pt" ? "page" : undefined} hreflang="pt">PT</a>
+  <a href={`/en/${path}`} class={locale === "en" ? "active" : ""} aria-current={locale === "en" ? "page" : undefined} hreflang="en">EN</a>
+</div>
+
+<style>
+  .segmented {
+    display: inline-flex;
+    padding: 2px;
+    border-radius: 9px;
+    background: var(--tertiary-fill);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .segmented a {
+    min-width: 34px;
+    padding: 4px 8px;
+    border-radius: 7px;
+    text-align: center;
+    color: var(--secondary-label);
+  }
+  .segmented a.active {
+    background: var(--system-background);
+    color: var(--label);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+  }
+  :global(:root[data-theme="dark"]) .segmented a.active {
+    background: #636366;
+  }
+</style>

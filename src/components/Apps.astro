@@ -1,0 +1,170 @@
+---
+import type { AppStatus, Locale } from "../data/types";
+import { useTranslations, type UIKey } from "../data/i18n";
+import { projects } from "../data/projects";
+import AppCard from "./AppCard.astro";
+import AppIcon from "./AppIcon.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const apps = projects.filter((p) => p.area === "ios");
+const featured = apps.find((p) => p.id === "mola");
+
+const groups: { status: AppStatus; title: UIKey; note?: UIKey }[] = [
+  { status: "appstore", title: "apps.appstore" },
+  { status: "upcoming", title: "apps.upcoming", note: "apps.upcomingNote" },
+  { status: "built", title: "apps.built", note: "apps.builtNote" },
+];
+---
+
+<section id="apps" class="section section-grouped">
+  <div class="container">
+    {
+      featured && (
+        <a class="today reveal" href={`#${featured.id}`}>
+          <div class="today-text">
+            <p class="today-eyebrow">{t("apps.featured")}</p>
+            <h2 class="today-title">{featured.title}</h2>
+            <p class="today-subtitle">{featured.tagline[locale]}</p>
+          </div>
+          <div class="today-art" aria-hidden="true">
+            <AppIcon project={featured} size={168} />
+          </div>
+          <div class="today-foot">
+            <AppIcon project={featured} size={44} />
+            <div>
+              <p class="today-foot-name">{featured.title}</p>
+              <p class="today-foot-meta">{featured.badge?.[locale]}</p>
+            </div>
+            <span class="pill today-pill">{t("apps.more")}</span>
+          </div>
+        </a>
+      )
+    }
+
+    {
+      groups.map((group) => {
+        const items = apps.filter((p) => p.status === group.status);
+        return (
+          items.length > 0 && (
+            <div class="app-group">
+              <header class="section-header">
+                <h2 class="section-title">{t(group.title)}</h2>
+                <span class="count">{items.length}</span>
+              </header>
+              {group.note && <p class="section-intro">{t(group.note)}</p>}
+              <div class={`app-grid app-grid-${group.status}`}>
+                {items.map((p) => (
+                  <AppCard project={p} locale={locale} />
+                ))}
+              </div>
+            </div>
+          )
+        );
+      })
+    }
+  </div>
+</section>
+
+<style>
+  /* Cartão da aba Hoje. As cores vêm do ícone do Mola: céu claro e lápis amarelo. */
+  .today {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px;
+    overflow: hidden;
+    margin-bottom: clamp(36px, 6vw, 56px);
+    padding: clamp(20px, 4vw, 32px);
+    border-radius: var(--radius-card);
+    background:
+      radial-gradient(120% 90% at 85% 30%, #fff6c9 0%, transparent 55%),
+      linear-gradient(160deg, #cfe6fb 0%, #a9d1f7 100%);
+    color: #0b2540;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .today:hover {
+    transform: scale(0.99);
+  }
+  .today-eyebrow {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(11, 37, 64, 0.6);
+  }
+  .today-title {
+    margin-top: 4px;
+    font-size: clamp(34px, 6vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .today-subtitle {
+    max-width: 22ch;
+    margin-top: 6px;
+    font-size: clamp(19px, 2.6vw, 24px);
+    font-weight: 600;
+    line-height: 1.2;
+    color: rgba(11, 37, 64, 0.75);
+  }
+  .today-art {
+    align-self: center;
+    transform: rotate(-8deg);
+    filter: drop-shadow(0 18px 30px rgba(11, 37, 64, 0.25));
+  }
+  .today-art :global(.app-icon) {
+    width: clamp(110px, 20vw, 168px) !important;
+    height: clamp(110px, 20vw, 168px) !important;
+  }
+  /* A barra de baixo do cartão: o app, de novo, pequeno, com material. */
+  .today-foot {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px calc(clamp(20px, 4vw, 32px) * -1) calc(clamp(20px, 4vw, 32px) * -1);
+    padding: 14px clamp(20px, 4vw, 32px);
+    background: rgba(255, 255, 255, 0.45);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+  }
+  .today-foot > div {
+    flex: 1;
+    min-width: 0;
+  }
+  .today-foot-name {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .today-foot-meta {
+    font-size: 13px;
+    color: rgba(11, 37, 64, 0.65);
+  }
+  .today-pill {
+    background: rgba(255, 255, 255, 0.7);
+    color: #0b5cad;
+  }
+
+  .app-group + .app-group {
+    margin-top: clamp(40px, 6vw, 64px);
+  }
+  .count {
+    font-size: 17px;
+    color: var(--secondary-label);
+  }
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px;
+  }
+  @media (max-width: 760px) {
+    .app-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

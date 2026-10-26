@@ -1,0 +1,180 @@
+---
+import type { Locale } from "../data/types";
+import { useTranslations } from "../data/i18n";
+import { name, role, tagline, resume } from "../data/profile";
+import { projects } from "../data/projects";
+import { contributions } from "../data/contributions";
+import { release } from "../data/sword";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const apps = projects.filter((p) => p.area === "ios");
+const onStore = apps.filter((p) => p.status === "appstore").length;
+const merged = contributions.filter((c) => c.state === "merged").length;
+
+// A faixa de números da ficha de um app: rótulo em cima, valor, legenda embaixo.
+const strip = [
+  { top: "App Store", value: String(onStore), bottom: t("strip.appstore") },
+  { top: t("strip.apps"), value: String(apps.length), bottom: "iOS · iPadOS · macOS · tvOS" },
+  { top: t("strip.mergedLabel"), value: String(merged), bottom: t("strip.merged") },
+  { top: "Sword", value: release.version, bottom: t("strip.sword") },
+  { top: "Apple", value: "2025", bottom: t("strip.academy") },
+];
+---
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-head">
+      <div class="avatar" aria-hidden="true">PT</div>
+      <div class="hero-text">
+        <p class="availability"><span class="dot"></span>{t("hero.available")}</p>
+        <h1 class="hero-name">{name}</h1>
+        <p class="hero-role">{role[locale]}</p>
+      </div>
+    </div>
+
+    <p class="hero-tagline">{tagline[locale]}</p>
+
+    <div class="hero-actions">
+      <a class="pill pill-filled pill-large" href="#apps">{t("hero.cta.projects")}</a>
+      <a class="pill pill-large" href="#contact">{t("hero.cta.contact")}</a>
+      <a class="pill pill-large" href={resume[locale]}>{t("contact.resume")}</a>
+    </div>
+
+    <dl class="strip">
+      {
+        strip.map((s) => (
+          <div class="strip-item">
+            <dt>{s.top}</dt>
+            <dd class="strip-value">{s.value}</dd>
+            <dd class="strip-caption">{s.bottom}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(28px, 6vw, 56px) clamp(24px, 4vw, 40px);
+  }
+  .hero-head {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 3vw, 28px);
+  }
+  .avatar {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: clamp(84px, 14vw, 128px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: linear-gradient(160deg, #5ac8fa 0%, #007aff 45%, #5856d6 100%);
+    color: #fff;
+    font-family: var(--font-rounded);
+    font-size: clamp(32px, 5.5vw, 48px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    box-shadow: var(--card-shadow);
+  }
+  .availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green);
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  /* Large Title, um pouco maior porque é a página inteira. */
+  .hero-name {
+    margin-top: 2px;
+    font-size: clamp(30px, 6vw, 48px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .hero-role {
+    margin-top: 2px;
+    font-size: clamp(17px, 2.4vw, 22px);
+    color: var(--secondary-label);
+  }
+  .hero-tagline {
+    max-width: 46ch;
+    margin-top: 24px;
+    font-size: clamp(19px, 2.6vw, 24px);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .strip {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    margin-top: clamp(28px, 5vw, 44px);
+    padding-block: 12px;
+    border-block: 0.5px solid var(--separator);
+  }
+  .strip-item {
+    padding-inline: 8px;
+    text-align: center;
+  }
+  .strip-item + .strip-item {
+    border-left: 0.5px solid var(--separator);
+  }
+  .strip dt {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--tertiary-label);
+  }
+  :global(:root[data-theme="dark"]) .strip dt {
+    color: var(--secondary-label);
+  }
+  .strip-value {
+    margin-top: 2px;
+    font-family: var(--font-rounded);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--secondary-label);
+  }
+  .strip-caption {
+    font-size: 12px;
+    color: var(--secondary-label);
+  }
+
+  /* No iPhone a faixa rola na horizontal, como na App Store. */
+  @media (max-width: 640px) {
+    .strip {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+    }
+    .strip::-webkit-scrollbar {
+      display: none;
+    }
+    .strip-item {
+      flex: 0 0 34%;
+      scroll-snap-align: start;
+    }
+  }
+</style>

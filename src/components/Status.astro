@@ -1,7 +1,9 @@
 ---
 import type { Locale } from "../data/types";
-import { useTranslations, otherLocale } from "../data/i18n";
+import { useTranslations } from "../data/i18n";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
 import { fetchLive } from "../data/live";
 import { shortName } from "../data/profile";
 
@@ -10,10 +12,8 @@ interface Props {
 }
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const other = otherLocale(locale);
 
 const live = await fetchLive();
-const today = new Date().toISOString().slice(0, 10);
 const unavailable = t("status.unavailable");
 
 /** Every row on this page is the same shape, so it's data rather than markup. */
@@ -58,109 +58,99 @@ const endpoints = [
 
 <BaseLayout
   locale={locale}
+  path="status/"
   title={`status — ${shortName}`}
   description="Live status of the service that renders the terminal on my GitHub profile."
 >
   <a class="skip-link" href="#main">{t("nav.skipToContent")}</a>
+  <Header locale={locale} path="status/" />
+  <main id="main">
+    <section class="section section-grouped status">
+      <div class="container">
+        <h1 class="status-title">
+          <span class="live-dot" aria-hidden="true"></span>{t("status.title")}
+        </h1>
+        <p class="section-intro">{t("live.intro")} {t("status.intro")}</p>
 
-  <div class="page">
-    <header class="man-head">
-      <span>Status(8)</span>
-      <span class="man-head__mid">Portfolio</span>
-      <span class="man-head__end controls">
-        <a class="control" href={`/${other}/status/`}>{t("lang.toggle")}</a>
-        <button class="control" type="button" id="theme-toggle">
-          {t("theme.toggle")}
-        </button>
-      </span>
-    </header>
+        <dl class="group">
+          {
+            rows.map((row) => (
+              <div class="row">
+                <dt class="row-title">{row.label}</dt>
+                <dd class="row-value" data-live={row.key} data-live-suffix={row.suffix}>
+                  {row.value}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
 
-    <main id="main">
-      <section class="section">
-        <h1 class="section__title">{t("sec.name")}</h1>
-        <div class="section__body">
-          <p>
-            status — {
-              locale === "pt"
-                ? "números do serviço por trás do terminal"
-                : "numbers from the service behind the terminal"
-            }
-          </p>
-        </div>
-      </section>
+        <h2 class="group-header endpoints-header">{t("status.endpoints")}</h2>
+        <ul class="group">
+          {
+            endpoints.map(([path, pt, en]) => (
+              <li class="row-li">
+                <a class="row" href={`https://pedrotessaro.vercel.app${path}`}>
+                  <code class="row-title">{path}</code>
+                  <span class="row-value">{locale === "pt" ? pt : en}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
 
-      <section class="section">
-        <h2 class="section__title">{t("sec.description")}</h2>
-        <div class="section__body">
-          <p class="dim">
-            {
-              locale === "pt"
-                ? "As latências são percentis sobre as últimas 500 requisições. Testes e cobertura vêm da última execução da CI na main. Nada disso está escrito neste site."
-                : "The latencies are percentiles over the last 500 requests. Tests and coverage come from the most recent CI run on main. None of it is written down in this site."
-            }
-          </p>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2 class="section__title">{t("sec.status")}</h2>
-        <div class="section__body">
-          <dl class="kv">
-            {
-              rows.map((row) => (
-                <>
-                  <dt>{row.label}</dt>
-                  <dd data-live={row.key} data-live-suffix={row.suffix}>
-                    {row.value}
-                  </dd>
-                </>
-              ))
-            }
-          </dl>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2 class="section__title">{t("sec.seeAlso")}</h2>
-        <div class="section__body">
-          <dl class="kv">
-            {
-              endpoints.map(([path, pt, en]) => (
-                <>
-                  <dt>
-                    <a href={`https://pedrotessaro.vercel.app${path}`}>{path}</a>
-                  </dt>
-                  <dd class="dim">{locale === "pt" ? pt : en}</dd>
-                </>
-              ))
-            }
-          </dl>
-          <p class="note">
-            <a href={`/${locale}/`}>{shortName}(1)</a>
-          </p>
-        </div>
-      </section>
-    </main>
-
-    <footer class="man-foot">
-      <span>{today}</span>
-      <span>Portfolio</span>
-      <span class="man-foot__end">Status(8)</span>
-    </footer>
-  </div>
-
-  <script is:inline>
-    (function () {
-      var button = document.getElementById("theme-toggle");
-      if (!button) return;
-      button.addEventListener("click", function () {
-        var root = document.documentElement;
-        var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-        root.setAttribute("data-theme", next);
-        try {
-          localStorage.setItem("theme", next);
-        } catch (e) {}
-      });
-    })();
-  </script>
+        <a class="pill pill-large back" href={`/${locale}/`}>‹ {t("status.back")}</a>
+      </div>
+    </section>
+  </main>
+  <Footer locale={locale} />
 </BaseLayout>
+
+<style>
+  .status {
+    min-height: 70vh;
+  }
+  .status-title {
+    margin-bottom: 16px;
+    font-size: clamp(30px, 6vw, 40px);
+    font-weight: 800;
+  }
+  .live-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 12px;
+    border-radius: 50%;
+    background: var(--green);
+    vertical-align: middle;
+  }
+  .row-title {
+    flex: 1;
+  }
+  .row-value {
+    font-variant-numeric: tabular-nums;
+  }
+  code.row-title {
+    padding: 0;
+    background: none;
+    font-size: 15px;
+    color: var(--tint);
+  }
+  .row-li {
+    position: relative;
+  }
+  .row-li + .row-li::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 16px;
+    border-top: 0.5px solid var(--separator);
+  }
+  .endpoints-header {
+    margin-top: 32px;
+  }
+  .back {
+    margin-top: 32px;
+  }
+</style>
