@@ -65,7 +65,6 @@ export const GET: APIRoute = () => {
     "",
     "- [Portfolio (English)](https://pedrotessaro.github.io/en/)",
     "- [Portfólio (português)](https://pedrotessaro.github.io/pt/)",
-    "- [Résumé (PDF)](https://pedrotessaro.github.io/resume/resume.pdf)",
     "",
   ].join("\n");
 

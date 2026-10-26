@@ -62,11 +62,6 @@ export const socials: SocialLink[] = [
   { label: "Email", url: `mailto:${email}`, icon: "email" },
 ];
 
-export const resume = {
-  pt: "/resume/curriculo.pdf",
-  en: "/resume/resume.pdf",
-};
-
 export const skills: SkillGroup[] = [
   {
     area: "ios",

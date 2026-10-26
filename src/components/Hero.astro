@@ -1,7 +1,7 @@
 ---
 import type { Locale } from "../data/types";
 import { useTranslations } from "../data/i18n";
-import { name, role, tagline, resume } from "../data/profile";
+import { name, role, tagline } from "../data/profile";
 import { projects } from "../data/projects";
 import { contributions } from "../data/contributions";
 import { release } from "../data/sword";
@@ -29,7 +29,8 @@ const strip = [
 <section class="hero">
   <div class="container">
     <div class="hero-head">
-      <div class="avatar" aria-hidden="true">PT</div>
+      <img class="avatar" src="/avatar.jpg" alt={name} width="512" height="512" />
+
       <div class="hero-text">
         <p class="availability"><span class="dot"></span>{t("hero.available")}</p>
         <h1 class="hero-name">{name}</h1>
@@ -42,7 +43,6 @@ const strip = [
     <div class="hero-actions">
       <a class="pill pill-filled pill-large" href="#apps">{t("hero.cta.projects")}</a>
       <a class="pill pill-large" href="#contact">{t("hero.cta.contact")}</a>
-      <a class="pill pill-large" href={resume[locale]}>{t("contact.resume")}</a>
     </div>
 
     <dl class="strip">
@@ -69,18 +69,13 @@ const strip = [
     gap: clamp(16px, 3vw, 28px);
   }
   .avatar {
-    display: grid;
     flex: none;
-    place-items: center;
     width: clamp(84px, 14vw, 128px);
+    height: auto;
     aspect-ratio: 1;
     border-radius: 50%;
-    background: linear-gradient(160deg, #5ac8fa 0%, #007aff 45%, #5856d6 100%);
-    color: #fff;
-    font-family: var(--font-rounded);
-    font-size: clamp(32px, 5.5vw, 48px);
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    object-fit: cover;
+    background: var(--secondary-system-background);
     box-shadow: var(--card-shadow);
   }
   .availability {

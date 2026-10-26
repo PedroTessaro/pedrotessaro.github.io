@@ -1,7 +1,7 @@
 ---
 import type { IconName, Locale } from "../data/types";
 import { useTranslations } from "../data/i18n";
-import { email, socials, resume } from "../data/profile";
+import { email, socials } from "../data/profile";
 import Icon from "./Icon.astro";
 
 interface Props {
@@ -12,7 +12,6 @@ const t = useTranslations(locale);
 
 const rows: { icon: IconName; tint: string; label: string; value: string; url: string }[] = [
   { icon: "envelope", tint: "var(--tint)", label: "Email", value: email, url: `mailto:${email}` },
-  { icon: "doc", tint: "var(--orange)", label: t("contact.resume"), value: "PDF", url: resume[locale] },
   ...socials
     .filter((s) => s.icon !== "email")
     .map((s) => ({

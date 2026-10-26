@@ -20,6 +20,7 @@ export function structuredData(locale: Locale) {
         "@type": "Person",
         "@id": `${SITE}/#person`,
         name,
+        image: `${SITE}/avatar.jpg`,
         jobTitle: role[locale],
         description: tagline[locale],
         email: `mailto:${email}`,
